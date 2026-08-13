@@ -1,18 +1,17 @@
 // /api/publications.js
 // Vercel Serverless Function — Myanmar-key proxy for koryofront publications
-// Links stay English | Code structure & keys in Myanmar | Data stays English
+// URL stays English | JSON keys in Myanmar | Data values stay English
 
-const_upstream_url = "https://koryofront.org/api/publications";
-const ရုပ်ပုံအခြေခံ = "https://koryofront.org/api/periodicals";
+const UPSTREAM_URL = "https://koryofront.org/api/publications";
+const THUMB_BASE = "https://koryofront.org/api/periodicals";
 
-const အမှတ်စဉ်မြေပုံ = {
+const KEY_MAP = {
   id:            "အမှတ်",
   title:         "ခေါင်းစဉ်",
   description:   "ဖော်ပြချက်",
   category:      "အမျိုးအစား",
   coverPath:     "အဖုံးလမ်း",
   coverMimeType: "အဖုံးအမျိုးအစား",
-  coverUrl:      "အဖုံး_URL",
   filePath:      "ဖိုင်လမ်း",
   fileName:      "ဖိုင်နာမည်",
   fileMimeType:  "ဖိုင်အမျိုးအစား",
@@ -22,57 +21,58 @@ const အမှတ်စဉ်မြေပုံ = {
   fileSize:      "ဖိုင်အရွယ်အစား",
 };
 
-function အင်္ဂလိပ်မှမြန်မာသို့(အင်္ဂလိပ်အရာ) {
-  const မြန်မာအရာ = {};
-  for (const [အင်္ဂလိပ်ကီး, တန်ဖိုး] of Object.entries(အင်္ဂလိပ်အရာ)) {
-    const မြန်မာကီး = အမှတ်စဉ်မြေပုံ[အင်္ဂလိပ်ကီး] || အင်္ဂလိပ်ကီး;
-    မြန်မာအရာ[မြန်မာကီး] = တန်ဖိုး;
+function transformToMyanmar(enItem) {
+  const mmItem = {};
+  for (const [enKey, value] of Object.entries(enItem)) {
+    const mmKey = KEY_MAP[enKey] || enKey;
+    mmItem[mmKey] = value;
   }
   // Add thumbnail URL from id
-  if (အင်္ဂလိပ်အရာ.id) {
-    မြန်မာအရာ["အဖုံး_URL"] = `${ရုပ်ပုံအခြေခံ}/${အင်္ဂလိပ်အရာ.id}/thumb`;
+  if (enItem.id) {
+    mmItem["အဖုံး_URL"] = `${THUMB_BASE}/${enItem.id}/thumb`;
   }
-  return မြန်မာအရာ;
+  return mmItem;
 }
 
-export default async function ကိုင်တွယ်သူ(request, တုံ့ပြန်မှု) {
+export default async function handler(req, res) {
   // CORS headers
-  တုံ့ပြန်မှု.setHeader("Access-Control-Allow-Origin", "*");
-  တုံ့ပြန်မှု.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
-  တုံ့ပြန်မှု.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-  if (request.method === "OPTIONS") {
-    return တုံ့ပြန်မှု.status(200).end();
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
   }
 
   try {
-    const တုံ့ပြန်ခြင်း = await fetch(const_upstream_url, {
+    const response = await fetch(UPSTREAM_URL, {
       headers: { "Accept": "application/json" },
     });
 
-    if (!တုံ့ပြန်ခြင်း.ok) {
-      return တုံ့ပြန်မှု.status(တုံ့ပြန်ခြင်း.status).json({
+    if (!response.ok) {
+      return res.status(response.status).json({
+        အောင်မြင်ခြင်း: false,
         အမှား: "အဝင်ဒေတာရယူရန် မအောင်မြင်ပါ",
-        အခြေအနေ: တုံ့ပြန်ခြင်း.status,
+        အခြေအနေ: response.status,
       });
     }
 
-    const အင်္ဂလိပ်စာရင်း = await တုံ့ပြန်ခြင်း.json();
-    const မြန်မာစာရင်း = Array.isArray(အင်္ဂလိပ်စာရင်း)
-      ? အင်္ဂလိပ်စာရင်း.map(အင်္ဂလိပ်မှမြန်မာသို့)
-      : အင်္ဂလိပ်မှမြန်မာသို့(အင်္ဂလိပ်စာရင်း);
+    const enData = await response.json();
+    const mmData = Array.isArray(enData)
+      ? enData.map(transformToMyanmar)
+      : transformToMyanmar(enData);
 
-    return တုံ့ပြန်မှု.status(200).json({
+    return res.status(200).json({
       အောင်မြင်ခြင်း: true,
-      ရင်းမြစ်: "https://koryofront.org/api/publications",
-      အရေအတွက်: Array.isArray(မြန်မာစာရင်း) ? မြန်မာစာရင်း.length : 1,
-      အချက်အလက်များ: မြန်မာစာရင်း,
+      ရင်းမြစ်: UPSTREAM_URL,
+      အရေအတွက်: Array.isArray(mmData) ? mmData.length : 1,
+      အချက်အလက်များ: mmData,
     });
 
-  } catch (အမှား) {
-    return တုံ့ပြန်မှု.status(500).json({
+  } catch (err) {
+    return res.status(500).json({
       အောင်မြင်ခြင်း: false,
-      အမှား: အမှား.message,
+      အမှား: err.message,
     });
   }
 }
