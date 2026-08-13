@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "functions": {
+    "api/publications.js": {
+      "maxDuration": 10
+    }
+  },
+  "routes": [
+    {
+      "src": "/api/publications",
+      "dest": "/api/publications.js"
+    }
+  ]
+}

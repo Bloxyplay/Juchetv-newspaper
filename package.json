@@ -1,0 +1,10 @@
+{
+  "name": "myanmar-key-proxy",
+  "version": "1.0.0",
+  "description": "Vercel proxy with Myanmar structure, English data",
+  "type": "module",
+  "scripts": {
+    "dev": "vercel dev"
+  },
+  "dependencies": {}
+}
