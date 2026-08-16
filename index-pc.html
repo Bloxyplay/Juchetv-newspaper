@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#141218">
+  <title>Blocky Tom's Personal Website - Live Streams</title>
+  <meta name="description" content="Watch KCTV, Mansudae TV and Voice of Korea live — plus a growing archive of recorded broadcasts, magazines, and news coverage from North Korean state media.">
+
+  <!-- Open Graph / Discord / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Blocky Tom's Personal Website">
+  <meta property="og:title" content="Blocky Tom's Personal Website - Live Streams">
+  <meta property="og:description" content="Watch KCTV, Mansudae TV and Voice of Korea live — plus a growing archive of recorded broadcasts, magazines, and news coverage from North Korean state media.">
+  <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/en/a/ad/Korean_Central_Television_2005.svg">
+  <meta property="og:theme-color" content="#FF5449">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Blocky Tom's Personal Website - Live Streams">
+  <meta name="twitter:description" content="Watch KCTV, Mansudae TV and Voice of Korea live — plus a growing archive of recorded broadcasts, magazines, and news coverage from North Korean state media.">
+  <meta name="twitter:image" content="https://upload.wikimedia.org/wikipedia/en/a/ad/Korean_Central_Television_2005.svg">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700;900&family=Roboto+Condensed:wght@600;700&display=swap');
+
+    /* ═══════════════════════════════════════════
+       MATERIAL 3 — DARK TONAL SYSTEM
+       Primary: DPRK-flag red reinterpreted as an M3 tonal ramp
+       Secondary: cool blue support tone
+       Tertiary: warm gold, used sparingly for "new/soon" states
+       ═══════════════════════════════════════════ */
+    :root {
+      /* Surfaces (M3 neutral dark ramp) */
+      --md-bg:                 #101014;
+      --surface:                #141218;
+      --surface-container-low:  #1A181E;
+      --surface-container:      #1D1B20;
+      --surface-container-high: #262429;
+      --surface-container-highest: #2F2D33;
+      --outline:                #48454E;
+      --outline-variant:        #322F37;
+
+      /* Text on surfaces */
+      --on-surface:          #E6E1E5;
+      --on-surface-variant:  #A8A3AC;
+
+      /* Primary — red tonal ramp */
+      --primary:            #FF5449;
+      --on-primary:         #690003;
+      --primary-container:  #93000A;
+      --on-primary-container: #FFDAD5;
+
+      /* Secondary — blue tonal ramp */
+      --secondary:           #A8C8FF;
+      --secondary-container: #1E3A5C;
+      --on-secondary-container: #D6E3FF;
+
+      /* Tertiary — gold, sparse use */
+      --tertiary:            #EFC44C;
+      --tertiary-container:  #4E4200;
+      --on-tertiary-container: #FBE292;
+
+      /* Status */
+      --success:            #7DDA8F;
+      --success-container:  #0F3F1C;
+      --error:              #FF897A;
+
+      /* Shape scale (M3) */
+      --shape-xs: 8px;
+      --shape-sm: 12px;
+      --shape-md: 16px;
+      --shape-lg: 20px;
+      --shape-xl: 28px;
+      --shape-full: 999px;
+
+      /* Elevation */
+      --elev-1: 0 1px 2px rgba(0,0,0,0.45), 0 1px 3px 1px rgba(0,0,0,0.25);
+      --elev-2: 0 1px 2px rgba(0,0,0,0.5), 0 3px 8px 1px rgba(0,0,0,0.3);
+    }
+
+    *, *::before, *::after {
+      margin: 0; padding: 0; box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Roboto', system-ui, sans-serif;
+      background: var(--md-bg);
+      color: var(--on-surface);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    .eyebrow-font { font-family: 'Roboto Condensed', 'Roboto', sans-serif; }
+
+    /* ─── TOP APP BAR (M3 Center-aligned-ish small bar) ─── */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--surface);
+      border-bottom: 1px solid var(--outline-variant);
+    }
+    .nav-inner {
+      max-width: 480px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+      height: 64px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0;
+      color: var(--on-surface);
+      text-decoration: none;
+      padding: 8px;
+      border-radius: var(--shape-lg);
+    }
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--primary-container);
+      border-radius: var(--shape-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .logo-icon svg { color: var(--on-primary-container); }
+    .nav-right { display: flex; align-items: center; gap: 2px; }
+    .nav-btn {
+      width: 44px; height: 44px;
+      border-radius: var(--shape-full);
+      border: none;
+      background: transparent;
+      color: var(--on-surface-variant);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease;
+      text-decoration: none;
+    }
+    .nav-btn:hover { background: var(--surface-container-high); color: var(--on-surface); }
+    .nav-btn:active { background: var(--surface-container-highest); }
+    .nav-btn svg { width: 22px; height: 22px; }
+
+    /* ─── MAIN SCROLL ─── */
+    .main {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 20px 16px 108px;
+    }
+
+    /* ─── HERO ─── */
+    .hero { margin-bottom: 18px; }
+    .status-chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      padding: 6px 12px 6px 10px;
+      border-radius: var(--shape-full);
+      margin-bottom: 12px;
+    }
+    .status-chip .dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--primary);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
+    .hero h1 {
+      font-size: 34px;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+    .hero p {
+      font-size: 14px;
+      color: var(--on-surface-variant);
+      line-height: 1.55;
+      max-width: 92%;
+    }
+
+    /* ─── VOD BANNER → M3 elevated card ─── */
+    .vod-banner {
+      background: linear-gradient(160deg, var(--surface-container-high), var(--surface-container));
+      border-radius: var(--shape-xl);
+      padding: 20px;
+      margin-bottom: 24px;
+      box-shadow: var(--elev-1);
+      position: relative;
+      overflow: hidden;
+    }
+    .vod-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      gap: 10px;
+    }
+    .vod-icon {
+      width: 48px; height: 48px;
+      background: var(--tertiary-container);
+      border-radius: var(--shape-md);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      color: var(--on-tertiary-container);
+    }
+    .soon-chip {
+      background: var(--surface-container-highest);
+      border: 1px solid var(--outline);
+      color: var(--on-surface);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: var(--shape-full);
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      display: flex; align-items: center; gap: 6px;
+      flex-shrink: 0;
+    }
+    .soon-chip svg { width: 12px; height: 12px; color: var(--tertiary); }
+    .vod-title {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0;
+      line-height: 1.2;
+      margin-bottom: 6px;
+      color: var(--on-surface);
+    }
+    .vod-sub {
+      font-size: 13px;
+      color: var(--on-surface-variant);
+      line-height: 1.5;
+    }
+
+    /* ─── SECTION LABEL (M3 list header) ─── */
+    .section-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 10px;
+      padding-left: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--outline-variant);
+    }
+
+    /* ─── CHANNEL GROUP ─── */
+    .channel-group { margin-bottom: 26px; }
+
+    /* ─── CHANNEL CARD → M3 filled card ─── */
+    .channel-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--surface-container);
+      border-radius: var(--shape-lg);
+      padding: 14px;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.15s ease, transform 0.1s ease;
+      margin-bottom: 10px;
+      position: relative;
+      overflow: hidden;
+    }
+    .channel-card:hover { background: var(--surface-container-high); }
+    .channel-card:active { transform: scale(0.98); background: var(--surface-container-highest); }
+    .channel-card.unavailable {
+      cursor: not-allowed;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .channel-icon {
+      width: 52px; height: 52px;
+      border-radius: var(--shape-md);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      background: var(--surface-container-highest);
+      overflow: hidden;
+    }
+    .channel-icon img {
+      width: 32px; height: 32px;
+      object-fit: contain;
+    }
+    .channel-icon svg { width: 24px; height: 24px; }
+
+    .channel-card-preview {
+      flex-direction: column;
+      align-items: stretch;
+      padding: 0;
+    }
+    .card-preview-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      background: var(--surface-container-highest);
+      border-radius: var(--shape-lg) var(--shape-lg) 0 0;
+    }
+    .card-preview-video {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      pointer-events: none;
+    }
+    .preview-error-msg {
+      display: none;
+      position: absolute;
+      inset: 0;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 6px;
+      color: var(--on-surface-variant);
+      font-size: 12.5px;
+      font-weight: 600;
+      background: var(--surface-container-highest);
+    }
+    .card-preview-wrap.preview-error .card-preview-video { display: none; }
+    .card-preview-wrap.preview-error .preview-error-msg { display: flex; }
+    .preview-hover-label {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 10px;
+      text-align: center;
+      padding: 0 16px;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0;
+      color: #fff;
+      background: rgba(0,0,0,0.5);
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      pointer-events: none;
+    }
+    .preview-play-icon {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--elev-2);
+      transform: scale(0.85);
+      transition: transform 0.2s ease;
+    }
+    .preview-play-icon svg { width: 20px; height: 20px; margin-left: 3px; color: var(--on-primary); }
+    .channel-card-preview:hover .preview-play-icon { transform: scale(1); }
+    .channel-card-preview:hover .preview-hover-label { opacity: 1; }
+    .channel-card-preview:hover .card-preview-wrap.preview-error .preview-hover-label { opacity: 0; }
+    .channel-card-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px;
+    }
+
+    .channel-info { flex: 1; min-width: 0; }
+    .channel-info h3 {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 3px;
+      letter-spacing: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .channel-info p {
+      font-size: 12.5px;
+      color: var(--on-surface-variant);
+      line-height: 1.45;
+      margin-bottom: 9px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* ─── EPG (Now / Next) ─── */
+    .epg-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 9px;
+    }
+    .epg-row {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      min-width: 0;
+    }
+    .epg-tag {
+      flex-shrink: 0;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      padding: 2px 7px;
+      border-radius: var(--shape-xs);
+      text-transform: uppercase;
+    }
+    .epg-tag-now {
+      background: var(--success-container);
+      color: var(--success);
+    }
+    .epg-tag-next {
+      background: var(--surface-container-highest);
+      color: var(--on-surface-variant);
+    }
+    .epg-title {
+      font-size: 12px;
+      color: var(--on-surface);
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .epg-row .epg-title { color: var(--on-surface-variant); }
+    .epg-row.epg-now .epg-title { color: var(--on-surface); }
+
+    /* ─── BADGES → M3 assist chips ─── */
+    .badge-row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 10.5px; font-weight: 700;
+      padding: 4px 10px;
+      border-radius: var(--shape-full);
+      letter-spacing: 0.2px;
+      border: 1px solid transparent;
+    }
+    .badge-live { background: var(--success-container); color: var(--success); }
+    .badge-hd { background: var(--secondary-container); color: var(--secondary); }
+    .badge-radio { background: var(--primary-container); color: var(--on-primary-container); }
+    .badge-unavailable { background: rgba(255,137,122,0.12); color: var(--error); }
+    .badge-new { background: var(--tertiary-container); color: var(--tertiary); }
+    .badge-pdf { background: var(--surface-container-highest); color: var(--on-surface-variant); border-color: var(--outline); }
+    .badge-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: currentColor;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    /* ─── TRAILING ICON BUTTON (go-icon) ─── */
+    .go-icon {
+      width: 36px; height: 36px;
+      color: var(--on-surface-variant);
+      flex-shrink: 0;
+      border-radius: var(--shape-full);
+      background: var(--surface-container-highest);
+      padding: 7px;
+      transition: background 0.15s, color 0.15s;
+    }
+    .channel-card:hover .go-icon { color: var(--primary); background: var(--primary-container); }
+    .channel-card.unavailable .go-icon { display: none; }
+
+    /* ─── BOTTOM NAVIGATION BAR (M3 Navigation Bar) ─── */
+    .tab-bar {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      z-index: 200;
+      background: var(--surface-container);
+      border-top: 1px solid var(--outline-variant);
+      padding: 10px 0 max(10px, env(safe-area-inset-bottom));
+    }
+    .tab-bar-inner {
+      max-width: 480px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-around;
+    }
+    .tab-item {
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      font-size: 11px; font-weight: 600;
+      color: var(--on-surface-variant);
+      cursor: pointer;
+      transition: color 0.2s;
+      padding: 4px 14px 0;
+      text-decoration: none;
+      letter-spacing: 0.1px;
+      position: relative;
+      min-width: 56px;
+    }
+    .tab-icon-wrap {
+      width: 56px; height: 30px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: var(--shape-full);
+      transition: background 0.2s ease;
+    }
+    .tab-item.active .tab-icon-wrap { background: var(--primary-container); }
+    .tab-item.active { color: var(--on-surface); }
+    .tab-item.active .tab-icon-wrap svg { color: var(--on-primary-container); }
+    .tab-item svg { width: 22px; height: 22px; }
+    .tab-item:hover .tab-icon-wrap { background: var(--surface-container-highest); }
+    .tab-item.active:hover .tab-icon-wrap { background: var(--primary-container); }
+
+    /* ─── ANIMATIONS ─── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeUp 0.4s cubic-bezier(0.2,0,0,1) forwards;
+    }
+    @keyframes fadeUp { to { opacity:1; transform:translateY(0); } }
+    .d1{animation-delay:.03s}.d2{animation-delay:.06s}.d3{animation-delay:.09s}
+    .d4{animation-delay:.12s}.d5{animation-delay:.15s}.d6{animation-delay:.18s}
+
+    /* ─── FOOTER ─── */
+    .footer {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 16px 20px 8px;
+      text-align: center;
+      font-size: 11px;
+      color: var(--on-surface-variant);
+      opacity: 0.6;
+      line-height: 1.8;
+    }
+
+    /* ─── SCROLLBAR ─── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--surface-container-highest); border-radius: 4px; }
+
+    /* ─── TAB: NEW / SOON DOT-BADGES ─── */
+    .tab-badge-dot {
+      position: absolute;
+      top: -1px; right: 6px;
+      width: 8px; height: 8px;
+      background: var(--tertiary);
+      border-radius: 50%;
+      border: 2px solid var(--surface-container);
+    }
+    .tab-soon-label {
+      position: absolute;
+      top: -8px; left: 50%;
+      transform: translateX(-50%);
+      font-size: 7px;
+      font-weight: 800;
+      letter-spacing: 0.4px;
+      color: #211B00;
+      background: var(--tertiary);
+      padding: 2px 5px;
+      border-radius: var(--shape-xs);
+      white-space: nowrap;
+    }
+
+    /* ─── NOTICE BANNER → M3 error/success tonal surface ─── */
+    .notice-banner {
+      display: none;
+      align-items: flex-start;
+      gap: 12px;
+      background: rgba(255,137,122,0.12);
+      border: 1px solid rgba(255,137,122,0.3);
+      border-radius: var(--shape-lg);
+      padding: 14px 16px;
+      margin-bottom: 18px;
+    }
+    .notice-banner.show { display: flex; }
+    .notice-icon {
+      width: 22px; height: 22px;
+      flex-shrink: 0;
+      color: var(--error);
+      margin-top: 1px;
+    }
+    .notice-icon svg { width: 100%; height: 100%; }
+    .notice-body { flex: 1; min-width: 0; }
+    .notice-title {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+      color: var(--error);
+      margin-bottom: 3px;
+    }
+    .notice-text {
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--on-surface);
+    }
+    .notice-banner.notice-success {
+      background: var(--success-container);
+      border-color: rgba(125,218,143,0.3);
+    }
+    .notice-banner.notice-success .notice-icon { color: var(--success); }
+    .notice-banner.notice-success .notice-title { color: var(--success); }
+
+    /* ═══════════════════════════════════════════
+       DESKTOP LAYOUT (this file is served only to
+       non-mobile visitors — see /middleware.js)
+       ═══════════════════════════════════════════ */
+    .nav-inner, .footer { max-width: 1120px; }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-right: 8px;
+    }
+    .nav-link {
+      display: flex; align-items: center; gap: 8px;
+      height: 40px; padding: 0 16px;
+      border-radius: var(--shape-full);
+      color: var(--on-surface-variant);
+      text-decoration: none;
+      font-size: 13.5px;
+      font-weight: 600;
+      transition: background 0.15s ease, color 0.15s ease;
+      position: relative;
+    }
+    .nav-link svg { width: 18px; height: 18px; }
+    .nav-link:hover { background: var(--surface-container-high); color: var(--on-surface); }
+    .nav-link.active { background: var(--primary-container); color: var(--on-primary-container); }
+    .nav-link .link-soon {
+      font-size: 8px; font-weight: 800; letter-spacing: 0.4px;
+      color: #211B00; background: var(--tertiary);
+      padding: 2px 5px; border-radius: var(--shape-xs);
+    }
+
+    .main {
+      max-width: 1120px;
+      padding: 32px 24px 64px;
+    }
+
+    .desktop-grid {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 32px;
+      align-items: start;
+    }
+
+    .desktop-grid .hero h1 { font-size: 40px; }
+    .desktop-grid .hero p { max-width: 60%; }
+
+    .desktop-side { display: flex; flex-direction: column; gap: 0; }
+    .desktop-side .vod-banner,
+    .desktop-side .notice-banner { margin-bottom: 20px; }
+
+    .desktop-primary .channel-group { margin-bottom: 30px; }
+
+    .desktop-primary .channel-group-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .desktop-primary .channel-card { margin-bottom: 0; }
+    .desktop-primary .channel-card-preview { grid-column: 1 / -1; }
+
+    /* Bottom tab bar is a mobile pattern — hidden on desktop */
+    .tab-bar { display: none; }
+    .main { padding-bottom: 64px; }
+
+    @media (max-width: 860px) {
+      .desktop-grid { grid-template-columns: 1fr; }
+      .desktop-grid .hero p { max-width: 100%; }
+      .desktop-primary .channel-group-grid { grid-template-columns: 1fr; }
+      .nav-links .nav-link span { display: none; }
+      .nav-link { padding: 0 10px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <div class="logo-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        Blocky Tom
+      </a>
+      <div class="nav-links">
+        <a href="/" class="nav-link active">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+          <span>Home</span>
+        </a>
+        <a href="/schedules" class="nav-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="3"/>
+            <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+          <span>Schedule</span>
+        </a>
+        <a href="/Magazine" class="nav-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+          </svg>
+          <span>Magazines</span>
+        </a>
+        <a href="/VOD" class="nav-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 8.5l1.2-3.6a1.5 1.5 0 0 1 1.9-.95l13.4 4.55"/>
+            <path d="M3 8.5V19a1.5 1.5 0 0 0 1.5 1.5h15A1.5 1.5 0 0 0 21 19V9.5A1.5 1.5 0 0 0 19.5 8H4.5A1.5 1.5 0 0 0 3 8.5z"/>
+            <path d="M7 5l3 3.5"/><path d="M12 3.8l3 3.5"/><path d="M3 8.5h18"/>
+          </svg>
+          <span>VOD</span>
+          <span class="link-soon">Soon</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main -->
+  <main class="main">
+
+    <!-- Hero -->
+    <div class="hero fade-in d1">
+      <div class="status-chip"><span class="dot"></span>Now broadcasting</div>
+      <h1>Live streams</h1>
+      <p>My personal collection of DPRK and regional state media, streamed live from the source. Built and maintained by me &mdash; Tom.</p>
+    </div>
+
+    <div class="desktop-grid">
+      <div class="desktop-primary">
+
+    <!-- Television -->
+    <div class="channel-group">
+      <div class="section-label fade-in d3">Television</div>
+      <div class="channel-group-grid">
+
+      <a href="/kctv" class="channel-card channel-card-preview fade-in d3">
+        <div class="card-preview-wrap">
+          <video class="card-preview-video" id="kctvPreviewVideo" muted loop playsinline disablepictureinpicture></video>
+          <div class="preview-error-msg">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="13"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span>Preview unavailable</span>
+          </div>
+          <div class="preview-hover-label">
+            <div class="preview-play-icon">
+              <svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+            <span>Watch Korean Central Television</span>
+          </div>
+        </div>
+        <div class="channel-card-row">
+          <div class="channel-icon">
+            <img src="https://upload.wikimedia.org/wikipedia/en/a/ad/Korean_Central_Television_2005.svg" alt="KCTV" loading="lazy">
+          </div>
+          <div class="channel-info">
+            <h3>Korean Central Television</h3>
+            <div class="epg-info" id="epgInfo">
+              <div class="epg-row epg-now">
+                <span class="epg-tag epg-tag-now">Now</span>
+                <span class="epg-title" id="epgNowTitle">Loading schedule…</span>
+              </div>
+              <div class="epg-row epg-next">
+                <span class="epg-tag epg-tag-next">Next</span>
+                <span class="epg-title" id="epgNextTitle">Loading schedule…</span>
+              </div>
+            </div>
+            <div class="badge-row">
+              <span class="badge badge-live"><span class="badge-dot"></span>Live</span>
+            </div>
+          </div>
+          <svg class="go-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
+      </a>
+
+      <a href="/qhtb" class="channel-card fade-in d4">
+        <div class="channel-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="color:var(--secondary)"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M17 2 12 7 7 2"/></svg>
+        </div>
+        <div class="channel-info">
+          <h3>Qinghai Amdo Language Television</h3>
+          <p>Tibetan-language state TV from Qinghai, China (qhtb.cn). News, culture &amp; entertainment.</p>
+          <div class="badge-row">
+            <span class="badge badge-live"><span class="badge-dot"></span>Live</span>
+          </div>
+        </div>
+        <svg class="go-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </a>
+
+      </div>
+    </div>
+
+    <!-- Radio -->
+    <div class="channel-group">
+      <div class="section-label fade-in d5">Radio</div>
+      <div class="channel-group-grid">
+
+      <a href="/KCBS" class="channel-card fade-in d5">
+        <div class="channel-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" style="color:var(--primary)">
+            <rect x="2" y="8" width="20" height="13" rx="3"/>
+            <path d="M7 8V6a1 1 0 0 1 .7-.95L16.5 2"/>
+            <circle cx="8" cy="14.5" r="2.5"/>
+            <line x1="13" y1="11" x2="19" y2="11"/>
+            <line x1="13" y1="14" x2="19" y2="14"/>
+            <line x1="13" y1="17" x2="17" y2="17"/>
+          </svg>
+        </div>
+        <div class="channel-info">
+          <h3>Korean Central Broadcasting</h3>
+          <p>State radio of the DPRK. News, music &amp; cultural programming.</p>
+          <div class="badge-row">
+            <span class="badge badge-live"><span class="badge-dot"></span>Live</span>
+            <span class="badge badge-radio">Radio</span>
+          </div>
+        </div>
+        <svg class="go-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </a>
+
+      <a href="/VOK" class="channel-card fade-in d6">
+        <div class="channel-icon">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Voice_of_Korea_Korean_Service_Logo.png" alt="Voice of Korea" loading="lazy" style="border-radius:4px;max-width:32px;max-height:32px;object-fit:contain">
+        </div>
+        <div class="channel-info">
+          <h3>Voice of Korea</h3>
+          <p>International broadcasting of the DPRK. Shortwave &amp; internet radio in multiple languages.</p>
+          <div class="badge-row">
+            <span class="badge badge-live"><span class="badge-dot"></span>Live</span>
+            <span class="badge badge-hd">Radio</span>
+          </div>
+        </div>
+        <svg class="go-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </a>
+
+      <a href="/qhtb-radio" class="channel-card fade-in d6">
+        <div class="channel-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" style="color:var(--secondary)">
+            <rect x="2" y="8" width="20" height="13" rx="3"/>
+            <path d="M7 8V6a1 1 0 0 1 .7-.95L16.5 2"/>
+            <circle cx="8" cy="14.5" r="2.5"/>
+            <line x1="13" y1="11" x2="19" y2="11"/>
+            <line x1="13" y1="14" x2="19" y2="14"/>
+            <line x1="13" y1="17" x2="17" y2="17"/>
+          </svg>
+        </div>
+        <div class="channel-info">
+          <h3>Qinghai Amdo Radio Station</h3>
+          <p>Tibetan-language radio from Qinghai, China (qhtb.cn). Only reachable via a Chinese VPN.</p>
+          <div class="badge-row">
+            <span class="badge badge-live"><span class="badge-dot"></span>Live</span>
+            <span class="badge badge-radio">Radio</span>
+          </div>
+        </div>
+        <svg class="go-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </a>
+
+      </div>
+    </div>
+
+    <!-- Magazines -->
+    <div class="channel-group">
+      <div class="section-label fade-in d5">Publications</div>
+      <div class="channel-group-grid">
+      <a href="/Magazine" class="channel-card fade-in d6">
+        <div class="channel-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="24" height="24" style="color:var(--tertiary)">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+          </svg>
+        </div>
+        <div class="channel-info">
+          <h3>DPRK Magazines</h3>
+          <p>North Korean periodicals &amp; publications — downloadable PDFs.</p>
+          <div class="badge-row">
+            <span class="badge badge-new"><span class="badge-dot"></span>New papers</span>
+            <span class="badge badge-pdf">PDF</span>
+          </div>
+        </div>
+        <svg class="go-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </a>
+      </div>
+    </div>
+
+      </div>
+      <!-- /desktop-primary -->
+
+      <div class="desktop-side">
+
+        <!-- Notice Banner -->
+        <div class="notice-banner" id="noticeBanner">
+          <div class="notice-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+          </div>
+          <div class="notice-body">
+            <div class="notice-title">Notice</div>
+            <div class="notice-text" id="noticeText">We are currently experiencing technical issues at the reception site. Live broadcasts will be restored shortly. Thank you for your patience.</div>
+          </div>
+        </div>
+
+        <!-- Online / Restored Banner -->
+        <div class="notice-banner notice-success" id="onlineBanner">
+          <div class="notice-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="8 12.5 10.8 15.3 16 9.3"/>
+            </svg>
+          </div>
+          <div class="notice-body">
+            <div class="notice-title">Restored</div>
+            <div class="notice-text" id="onlineText">Service has been restored. We experienced a power outage at the reception site, and live broadcasts are back to normal. We apologize for the inconvenience.</div>
+          </div>
+        </div>
+
+        <!-- VOD Banner -->
+        <div class="vod-banner fade-in d2">
+          <div class="vod-top">
+            <div class="vod-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 8.5l1.2-3.6a1.5 1.5 0 0 1 1.9-.95l13.4 4.55"/>
+                <path d="M3 8.5V19a1.5 1.5 0 0 0 1.5 1.5h15A1.5 1.5 0 0 0 21 19V9.5A1.5 1.5 0 0 0 19.5 8H4.5A1.5 1.5 0 0 0 3 8.5z"/>
+                <path d="M7 5l3 3.5"/>
+                <path d="M12 3.8l3 3.5"/>
+                <path d="M3 8.5h18"/>
+              </svg>
+            </div>
+            <div class="soon-chip">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              Coming soon
+            </div>
+          </div>
+
+          <div class="vod-title">Video On Demand</div>
+          <p class="vod-sub">On-demand archive of DPRK broadcasts. Watch anytime, anywhere.</p>
+        </div>
+
+      </div>
+      <!-- /desktop-side -->
+
+    </div>
+    <!-- /desktop-grid -->
+
+    <footer class="footer">
+      &copy; Blocky Tom's Personal Website &mdash; Not affiliated with any broadcasting entity.<br>
+      Built and run by Tom, independently. Streams owned by Bloxy Play Comprehensive Channel.
+    </footer>
+  </main>
+
+  <!-- Bottom Navigation Bar -->
+  <div class="tab-bar">
+    <div class="tab-bar-inner">
+      <a href="/" class="tab-item active">
+        <span class="tab-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        </span>
+        Home
+      </a>
+      <a href="/schedules" class="tab-item">
+        <span class="tab-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="3"/>
+            <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+        </span>
+        Schedule
+      </a>
+      <a href="/Magazine" class="tab-item">
+        <span class="tab-icon-wrap" style="position:relative">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+          </svg>
+          <span class="tab-badge-dot"></span>
+        </span>
+        Magazines
+      </a>
+      <a href="/VOD" class="tab-item" style="position:relative">
+        <span class="tab-soon-label">Soon</span>
+        <span class="tab-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 8.5l1.2-3.6a1.5 1.5 0 0 1 1.9-.95l13.4 4.55"/>
+            <path d="M3 8.5V19a1.5 1.5 0 0 0 1.5 1.5h15A1.5 1.5 0 0 0 21 19V9.5A1.5 1.5 0 0 0 19.5 8H4.5A1.5 1.5 0 0 0 3 8.5z"/>
+            <path d="M7 5l3 3.5"/>
+            <path d="M12 3.8l3 3.5"/>
+            <path d="M3 8.5h18"/>
+          </svg>
+        </span>
+        VOD
+      </a>
+    </div>
+  </div>
+
+  <script>
+    // Clock in status bar (if present)
+    function updateTime() {
+      const el = document.getElementById('clock');
+      if (!el) return;
+      const now = new Date();
+      el.textContent = now.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+    }
+    updateTime();
+    setInterval(updateTime, 10000);
+  </script>
+
+  <!-- KCTV card preview: plays kctvpreview.mp4 -->
+  <script>
+    (function () {
+      const video = document.getElementById('kctvPreviewVideo');
+      if (!video) return;
+      const wrap = video.closest('.card-preview-wrap');
+
+      video.addEventListener('error', function () {
+        if (wrap) wrap.classList.add('preview-error');
+      });
+
+      video.src = '/kctvpreview.mp4';
+      video.load();
+      video.play().catch(function () {});
+    })();
+  </script>
+
+  <!-- Site-wide notice banner, driven by notice.json -->
+  <script>
+    (function () {
+      const NOTICE_URL = '/notice.json';
+      const banner = document.getElementById('noticeBanner');
+      const textEl = document.getElementById('noticeText');
+      const onlineBanner = document.getElementById('onlineBanner');
+      const onlineTextEl = document.getElementById('onlineText');
+      if (!banner) return;
+
+      const DEFAULT_MESSAGE = 'We are currently experiencing technical issues at the reception site. Live broadcasts will be restored shortly. Thank you for your patience.';
+      const DEFAULT_ONLINE_MESSAGE = 'Service has been restored. We experienced a power outage at the reception site, and live broadcasts are back to normal. We apologize for the inconvenience.';
+
+      async function loadNotice() {
+        try {
+          const res = await fetch(NOTICE_URL + '?t=' + Date.now(), { cache: 'no-store' });
+          if (!res.ok) throw new Error('notice.json fetch failed');
+          const data = await res.json();
+
+          const isNotice = !!(data && data.notice === true);
+          const isOnline = !!(data && data['status-online'] === true);
+
+          if (isNotice) {
+            if (textEl) textEl.textContent = (typeof data.message === 'string' && data.message.trim()) ? data.message : DEFAULT_MESSAGE;
+            banner.classList.add('show');
+          } else {
+            banner.classList.remove('show');
+          }
+
+          // The "restored" banner only shows once the outage notice has been
+          // cleared (notice: false) and status-online is explicitly true.
+          if (onlineBanner) {
+            if (!isNotice && isOnline) {
+              if (onlineTextEl) onlineTextEl.textContent = (typeof data['status-online-message'] === 'string' && data['status-online-message'].trim()) ? data['status-online-message'] : DEFAULT_ONLINE_MESSAGE;
+              onlineBanner.classList.add('show');
+            } else {
+              onlineBanner.classList.remove('show');
+            }
+          }
+        } catch (e) {
+          // If notice.json is missing/unreachable, fail quietly and keep banners hidden.
+          banner.classList.remove('show');
+          if (onlineBanner) onlineBanner.classList.remove('show');
+        }
+      }
+
+      loadNotice();
+      setInterval(loadNotice, 60 * 1000);
+    })();
+  </script>
+
+  <!-- KCTV EPG: Now / Next, based on Pyongyang time -->
+  <script>
+    (function () {
+      const EPG_BASE = 'https://juche-tv-epg-api.vercel.app/api/bloxyplaytv';
+      const nowEl = document.getElementById('epgNowTitle');
+      const nextEl = document.getElementById('epgNextTitle');
+      const epgWrap = document.getElementById('epgInfo');
+      if (!nowEl || !nextEl) return;
+
+      function pyongyangParts(date) {
+        const fmt = new Intl.DateTimeFormat('en-US', {
+          timeZone: 'Asia/Pyongyang',
+          year: 'numeric', month: '2-digit', day: '2-digit',
+          hour: '2-digit', minute: '2-digit', hour12: false
+        });
+        const parts = {};
+        fmt.formatToParts(date).forEach(function (p) { parts[p.type] = p.value; });
+        const hour = parts.hour === '24' ? 0 : parseInt(parts.hour, 10);
+        return {
+          dateStr: parts.year + '-' + parts.month + '-' + parts.day,
+          minutes: hour * 60 + parseInt(parts.minute, 10)
+        };
+      }
+
+      function toMinutes(hhmm) {
+        const bits = hhmm.split(':');
+        return parseInt(bits[0], 10) * 60 + parseInt(bits[1], 10);
+      }
+
+      function fetchEpg(dateStr) {
+        return fetch(EPG_BASE + '?ch=KCTV&date=' + dateStr).then(function (res) {
+          if (!res.ok) throw new Error('EPG fetch failed');
+          return res.json();
+        });
+      }
+
+      function titleOf(program) {
+        if (!program || !program.title) return null;
+        return program.title.en || program.title.ko || 'Programming';
+      }
+
+      async function loadEpg() {
+        try {
+          const nowParts = pyongyangParts(new Date());
+          const data = await fetchEpg(nowParts.dateStr);
+          const programs = (data && data.programs) || [];
+
+          let current = null;
+          let next = null;
+
+          for (let i = 0; i < programs.length; i++) {
+            const p = programs[i];
+            const start = toMinutes(p.start);
+            let end = toMinutes(p.end);
+            if (end <= start) end += 24 * 60;
+            if (nowParts.minutes >= start && nowParts.minutes < end) {
+              current = p;
+              next = programs[i + 1] || null;
+              break;
+            }
+          }
+
+          if (!current && programs.length && nowParts.minutes < toMinutes(programs[0].start)) {
+            next = programs[0];
+          }
+
+          if (!next) {
+            try {
+              const tomorrow = new Date(Date.now() + 24 * 60 * 60 * 1000);
+              const tParts = pyongyangParts(tomorrow);
+              const dataNext = await fetchEpg(tParts.dateStr);
+              if (dataNext && dataNext.programs && dataNext.programs.length) {
+                next = dataNext.programs[0];
+              }
+            } catch (e) { /* ignore, next stays null */ }
+          }
+
+          nowEl.textContent = titleOf(current) || 'Off air';
+          nextEl.textContent = titleOf(next) || 'TBA';
+        } catch (e) {
+          if (epgWrap) epgWrap.style.display = 'none';
+        }
+      }
+
+      loadEpg();
+      setInterval(loadEpg, 5 * 60 * 1000);
+    })();
+  </script>
+</body>
+</html>

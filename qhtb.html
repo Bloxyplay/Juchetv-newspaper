@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#101014">
+  <title>Qinghai Amdo Language Television &mdash; Qinghai Tibetan Radio &amp; TV &middot; Blocky Tom's Personal Website</title>
+  <meta name="description" content="Watch Qinghai Amdo Language Television, Qinghai Tibetan Radio &amp; TV Station, live &mdash; plus browse the program schedule and recordings on Blocky Tom's Personal Website.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Blocky Tom's Personal Website">
+  <meta property="og:title" content="Qinghai Amdo Language Television &mdash; Qinghai Tibetan Radio &amp; TV &middot; Blocky Tom's Personal Website">
+  <meta property="og:description" content="Watch Qinghai Amdo Language Television, Qinghai Tibetan Radio &amp; TV Station, live &mdash; plus browse the program schedule and recordings on Blocky Tom's Personal Website.">
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700;900&display=swap');
+    :root {
+      --bg:#101014; --surf:#1D1B20; --surf2:#262429; --surf3:#2F2D33;
+      --brd:#322F37; --brd2:#48454E;
+      --tx:#E6E1E5; --tx2:#A8A3AC; --tx3:#6f6b73;
+      --acc:#FF5449; --acc2:#FF8177; --glow:rgba(255,84,73,0.28);
+      --glowgrn:rgba(125,218,143,.32);
+      --tint:#A8C8FF; --grn:#7DDA8F; --gld:#EFC44C;
+      --kju:#E0201A; --kju2:#FF9E90;
+      --rsm:8px; --rmd:12px; --rlg:16px; --rxl:20px;
+      --shsm:0 1px 2px rgba(0,0,0,.45),0 1px 3px 1px rgba(0,0,0,.25);
+      --shmd:0 1px 2px rgba(0,0,0,.5),0 3px 8px 1px rgba(0,0,0,.3);
+      --shlg:0 1px 2px rgba(0,0,0,.5),0 3px 8px 1px rgba(0,0,0,.3);
+      --font:'Roboto',system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
+      --mono:'Roboto Mono',ui-monospace,'SF Mono',monospace;
+    }
+
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html{scroll-behavior:smooth}
+    body{font-family:var(--font);background:var(--bg);color:var(--tx);min-height:100vh;display:flex;flex-direction:column;-webkit-font-smoothing:antialiased}
+
+    /* NAV */
+    .nav{position:sticky;top:0;z-index:200;background:var(--surf);border-bottom:1px solid var(--brd)}
+
+    .nav-inner{max-width:1160px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:64px;gap:16px}
+    .logo{display:inline-flex;align-items:center;gap:12px;text-decoration:none;flex-shrink:0;font-size:19px;font-weight:700;color:var(--tx);padding:8px;border-radius:var(--rxl)}
+    .logo-mark{width:36px;height:36px;background:#93000A;border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .logo-mark svg{width:18px;height:18px;fill:#FFDAD5}
+    .logo-text{font-size:19px;font-weight:700;color:var(--tx);letter-spacing:0}
+    .nav-r{display:flex;align-items:center;gap:4px}
+    .nav-lnk{display:flex;align-items:center;gap:8px;height:40px;font-size:13.5px;font-weight:600;color:var(--tx2);text-decoration:none;padding:0 16px;border-radius:100px;transition:background .15s,color .15s;white-space:nowrap}
+    .nav-lnk:hover{color:var(--tx);background:var(--surf2)}
+    .nav-lnk.active{background:#93000A;color:#FFDAD5}
+    .nav-lnk svg{width:18px;height:18px}
+    @media (max-width:700px){ .nav-lnk span{display:none} .nav-lnk{padding:0 10px} }
+
+    /* PAGE */
+    .page{flex:1;max-width:1160px;width:100%;margin:0 auto;padding:24px 20px 60px;position:relative}
+
+    /* BACK */
+    .back{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--tx2);text-decoration:none;margin-bottom:20px;padding:9px 16px 9px 12px;border-radius:100px;border:1px solid var(--brd2);background:var(--surf);transition:all .2s}
+    .back:hover{color:var(--tx);background:var(--surf2);border-color:var(--brd2)}
+    .back svg{width:15px;height:15px}
+
+    /* CHANNEL HEADER */
+    .ch-hdr{display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap;padding-bottom:20px;border-bottom:1px solid var(--brd)}
+    .ch-logo{width:56px;height:56px;flex-shrink:0;background:var(--surf);border:1px solid var(--brd2);border-radius:var(--rmd);padding:8px;display:flex;align-items:center;justify-content:center}
+    .ch-logo img{width:100%;height:100%;object-fit:contain}
+    .ch-info{flex:1;min-width:0}
+    .ch-name{font-size:26px;font-weight:900;letter-spacing:-.6px;color:var(--tx);line-height:1.15}
+    .ch-sub{font-size:13px;color:var(--tx2);margin-top:4px;font-weight:500}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+
+    /* PLAYER */
+    .player-wrap{position:relative;background:#000;border-radius:var(--rxl);overflow:hidden;box-shadow:var(--shlg),0 0 0 1px var(--brd);aspect-ratio:16/9;container-type:size;container-name:offairbox}
+    #dplayer{width:100%!important;aspect-ratio:16/9;position:relative;
+      --plyr-color-main:#e2472b;
+      --plyr-video-background:#000;
+      --plyr-menu-background:#1a1512;
+      --plyr-menu-color:#f2ece2;
+      --plyr-menu-arrow-color:#8f8577;
+      --plyr-menu-radius:10px;
+      --plyr-tooltip-background:#1a1512;
+      --plyr-tooltip-color:#f2ece2;
+      --plyr-control-radius:8px;
+      --plyr-control-icon-size:18px;
+      --plyr-font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+    }
+    #dplayer .plyr,#dplayer .plyr__video-wrapper{width:100%;height:100%}
+    #dplayer .plyr__video-wrapper{padding-bottom:0!important}
+    #dplayer video{width:100%;height:100%;object-fit:contain;background:#000}
+    #dplayer .plyr__control--overlaid{background:rgba(226,71,43,.88)}
+    #dplayer .plyr__control--overlaid:hover,#dplayer .plyr__control--overlaid:focus{background:var(--acc)}
+    #dplayer .plyr__controls .plyr__control.plyr__tab-focus,#dplayer .plyr__control:hover{color:#fff}
+    .live-badge{display:flex;align-items:center;gap:6px;margin-left:-6px;padding:0 8px 0 2px;font-size:12px;font-weight:800;letter-spacing:.6px;color:#fff;text-transform:uppercase;font-family:var(--font);pointer-events:none}
+    .live-dot{width:7px;height:7px;border-radius:50%;background:var(--acc);box-shadow:0 0 8px rgba(226,71,43,.7);animation:blink 1.4s ease infinite;flex-shrink:0}
+    .live-spinner{display:none;width:12px;height:12px;border-radius:50%;border:2px solid rgba(255,255,255,.28);border-top-color:#fff;animation:liveSpin 1.8s linear infinite;flex-shrink:0}
+    @keyframes liveSpin{to{transform:rotate(360deg)}}
+
+    /* OFF-AIR OVERLAY — stays a fixed 16:9 box; contents scale fluidly to the box's own size via container queries */
+    .offair-overlay{position:absolute;inset:0;z-index:50;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:3cqh 4cqw;overflow:hidden}
+    .offair-overlay .offair-bg{position:absolute;inset:0;background-image:var(--offair-bg-img);background-size:cover;background-position:center;filter:blur(0px) brightness(.32) saturate(.85);transform:scale(1.1);transition:filter 1.1s ease}
+    .offair-overlay.blurred .offair-bg{filter:blur(26px) brightness(.32) saturate(.85)}
+    .offair-overlay .offair-scrim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,12,.55),rgba(10,10,12,.82))}
+    .offair-overlay .offair-content{position:relative;z-index:1;max-width:440px;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;gap:clamp(3px,2cqh,16px)}
+    .offair-overlay .offair-icon{width:48px;height:48px;width:clamp(20px,11cqh,48px);height:clamp(20px,11cqh,48px);flex-shrink:0;border-radius:50%;background:rgba(255,84,73,.14);border:1px solid rgba(255,84,73,.35);display:flex;align-items:center;justify-content:center}
+    .offair-overlay .offair-icon svg{width:22px;height:22px;width:clamp(9px,5cqh,22px);height:clamp(9px,5cqh,22px);color:var(--acc2)}
+    .offair-overlay .offair-pill{font-size:10px;font-size:clamp(7px,2.6cqh,10px);font-weight:800;letter-spacing:1.4px;text-transform:uppercase;background:rgba(255,84,73,.16);color:var(--acc2);border:1px solid rgba(255,84,73,.35);padding:2px 10px;padding:clamp(1px,.9cqh,4px) clamp(6px,2.6cqw,12px);border-radius:100px;white-space:nowrap}
+    .offair-overlay .offair-title{font-size:18px;font-size:clamp(11px,5.2cqh,18px);font-weight:800;letter-spacing:-.3px;color:#fff;line-height:1.15}
+    .offair-overlay .offair-text{font-size:13px;font-size:clamp(8px,3.6cqh,13px);line-height:1.4;color:rgba(230,225,229,.82);font-weight:500;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    .offair-overlay .offair-timer{display:flex;flex-direction:column;align-items:center;gap:3px;gap:clamp(1px,.8cqh,6px);padding:8px 18px;padding:clamp(4px,2.4cqh,12px) clamp(10px,4.4cqw,22px);border-radius:var(--rlg);background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1)}
+    .offair-overlay .offair-timer-label{font-size:10.5px;font-size:clamp(6.5px,2.2cqh,10.5px);font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--tx3);white-space:nowrap}
+    .offair-overlay .offair-timer-value{font-family:var(--mono);font-size:24px;font-size:clamp(13px,7cqh,24px);font-weight:700;color:#fff;letter-spacing:1px;font-variant-numeric:tabular-nums}
+    .offair-overlay .offair-resume-note{font-size:11px;font-size:clamp(0px,2cqh,11px);color:var(--tx3);font-weight:500;overflow:hidden}
+    @container offairbox (max-height:150px){ .offair-overlay .offair-resume-note{display:none} }
+
+    /* ACTIONS */
+    .action-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;background:var(--surf);border:1px solid var(--brd2);border-radius:var(--rmd);color:var(--tx);font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;transition:all .2s;white-space:nowrap;font-family:var(--font)}
+    .btn svg{width:15px;height:15px;color:var(--tx2);flex-shrink:0}
+    .btn:hover{background:var(--surf2);transform:translateY(-1px);box-shadow:var(--shsm)}
+    .btn:active{transform:none}
+    .btn.pri{background:var(--acc);border-color:transparent;color:#fff;box-shadow:0 0 16px rgba(226,71,43,.22)}
+    .btn.pri svg{color:rgba(255,255,255,.7)}
+    .btn.pri:hover{background:#a8341f;box-shadow:0 0 28px rgba(226,71,43,.42)}
+
+    /* REWIND SECTION */
+    .rw-sec{margin-top:28px}
+    .rw-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:12px;flex-wrap:wrap}
+    .rw-ttl{display:flex;align-items:center;gap:10px}
+    .rw-pill{font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;background:linear-gradient(135deg,var(--gld),var(--tint));color:#fff;padding:3px 9px;border-radius:100px}
+    .rw-name{font-size:16px;font-weight:800;letter-spacing:-.3px}
+    .rw-sub{font-size:12px;color:var(--tx3);margin-top:2px}
+
+    /* Date tabs */
+    .rw-dates{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;margin-bottom:14px;scrollbar-width:none}
+    .rw-dates::-webkit-scrollbar{display:none}
+    .rw-date-btn{flex-shrink:0;padding:8px 16px;border-radius:var(--rmd);border:1px solid var(--brd);background:var(--surf);color:var(--tx2);font-family:var(--font);font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap}
+    .rw-date-btn:hover{background:var(--surf2);color:var(--tx);border-color:var(--brd2)}
+    .rw-date-btn.on{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;border-color:transparent;box-shadow:0 0 14px rgba(226,71,43,.25)}
+
+    /* Hour grid */
+    .rw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+    .rw-card{background:var(--surf);border:1px solid var(--brd);border-radius:var(--rmd);padding:10px 10px 12px;text-align:center;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+    .rw-thumb{width:100%;aspect-ratio:16/9;border-radius:8px;overflow:hidden;background:linear-gradient(135deg,var(--surf2),var(--surf));margin-bottom:10px;position:relative}
+    .rw-thumb img{width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity .25s}
+    .rw-thumb img.loaded{opacity:1}
+    .rw-card.live .rw-thumb{box-shadow:0 0 0 2px var(--grn) inset}
+    .rw-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(226,71,43,.06),transparent 60%);opacity:0;transition:opacity .2s}
+    .rw-card:hover{background:var(--surf2);transform:translateY(-2px);box-shadow:var(--shsm);border-color:var(--brd2)}
+    .rw-card:hover::before{opacity:1}
+    .rw-card:active{transform:translateY(0)}
+    .rw-card.playing{border-color:var(--acc);background:linear-gradient(135deg,rgba(226,71,43,.08),var(--surf2));box-shadow:0 0 20px rgba(226,71,43,.15)}
+    .rw-card.playing::before{opacity:1}
+    .rw-card .rw-time{font-size:15px;font-weight:800;color:var(--tx);position:relative;z-index:1}
+    .rw-card .rw-status{font-size:10px;font-weight:700;color:var(--grn);margin-top:6px;text-transform:uppercase;letter-spacing:.6px;position:relative;z-index:1}
+
+    /* Rewind states */
+    .rw-sw{background:var(--surf);border:1px solid var(--brd);border-radius:var(--rxl);padding:44px 20px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px}
+    .rw-sw .epg-si{font-size:34px}
+    .rw-sw .epg-sm{font-size:13px;color:var(--tx2)}
+
+    /* EPG SECTION */
+    .epg-sec{margin-top:28px}
+    .epg-sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:12px;flex-wrap:wrap}
+    .epg-sec-ttl{display:flex;align-items:center;gap:10px}
+    .epg-pill{font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;padding:3px 9px;border-radius:100px}
+    .epg-sec-name{font-size:16px;font-weight:800;letter-spacing:-.3px}
+
+    /* EPG CONTROLS */
+    .epg-ctrl-bar{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:12px}
+    .epg-ctrl-grp{display:flex;flex-direction:column;gap:6px;flex:1;min-width:180px}
+    .epg-ctrl-lbl{font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--tx2)}
+    .epg-select-wrap{position:relative}
+    .epg-select{appearance:none;-webkit-appearance:none;-moz-appearance:none;width:100%;background:var(--surf);border:1px solid var(--brd2);border-radius:var(--rmd);padding:10px 34px 10px 13px;font-family:var(--font);font-size:13px;font-weight:700;color:var(--tx);cursor:pointer;transition:border-color .2s,background .2s}
+    .epg-select:hover{border-color:var(--acc);background:var(--surf2)}
+    .epg-select:focus{outline:none;border-color:var(--acc)}
+    .epg-select-wrap::after{content:'';position:absolute;right:13px;top:50%;width:8px;height:8px;border-right:2px solid var(--tx2);border-bottom:2px solid var(--tx2);transform:translateY(-65%) rotate(45deg);pointer-events:none}
+    .epg-src-note{font-size:11.5px;line-height:1.55;color:var(--tx3);margin:-2px 0 18px;padding:9px 13px;background:var(--surf);border:1px solid var(--brd);border-radius:var(--rsm)}
+    .epg-src-note strong{color:var(--tx2);font-weight:700}
+    .kst-clk{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--tx2);background:var(--surf);border:1px solid var(--brd);padding:5px 12px;border-radius:100px}
+    .kst-clk svg{width:12px;height:12px;flex-shrink:0}
+    .kst-t{font-variant-numeric:tabular-nums}
+
+    /* SCHEDULE CARD */
+    .sched-card{background:var(--surf);border:1px solid var(--brd);border-radius:var(--rxl);overflow:hidden}
+    .sched-hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--brd)}
+    .sched-hdr-ttl{font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--tx);display:flex;align-items:center;gap:8px}
+    .sched-hdr-ttl svg{width:14px;height:14px;color:var(--tx2)}
+    .sched-hdr-kst{font-size:11px;font-weight:600;letter-spacing:.4px;color:var(--tx3);font-family:var(--mono)}
+    .sched-list{max-height:420px;overflow-y:auto}
+    .sched-list::-webkit-scrollbar{width:4px}
+    .sched-list::-webkit-scrollbar-track{background:transparent}
+    .sched-list::-webkit-scrollbar-thumb{background:var(--surf3);border-radius:4px}
+    .sched-row{display:flex;align-items:stretch;gap:0;border-bottom:1px solid var(--brd);transition:background .15s;position:relative}
+    .sched-row:last-child{border-bottom:none}
+    .sched-row.past{opacity:.35}
+    .sched-row:hover{background:var(--surf2)}
+    .sched-row.onair{background:linear-gradient(90deg,rgba(125,218,143,.10) 0%,transparent 65%)}
+    .sched-row.onair::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--grn);box-shadow:0 0 10px var(--glowgrn)}
+    .sched-time-col{flex-shrink:0;width:76px;padding:14px 0 14px 20px}
+    .sched-time{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--tx3);letter-spacing:.3px}
+    .sched-row.onair .sched-time{color:var(--grn);font-size:14px}
+    .sched-body{flex:1;min-width:0;padding:14px 20px 14px 0}
+    .onair-badge{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--grn);margin-bottom:4px}
+    .onair-dot{width:6px;height:6px;border-radius:50%;background:var(--grn);box-shadow:0 0 8px var(--grn);animation:blink 1.6s ease infinite}
+    .sched-cat{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--tx2);margin-bottom:4px}
+    .sched-row.onair .sched-cat{color:var(--tx2)}
+    .sched-ttl{font-size:14px;font-weight:600;color:var(--tx);line-height:1.4}
+    .sched-row.past .sched-ttl{color:var(--tx2)}
+    .sched-row.onair .sched-ttl{font-weight:700;font-size:15px}
+    .sched-sub{font-size:12px;color:var(--tx3);margin-top:3px;font-family:var(--mono);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .sched-rem{font-size:11px;color:var(--tx2);margin-top:6px;font-weight:600}
+    .sched-foot{display:flex;align-items:center;justify-content:center;gap:6px;padding:14px 20px;border-top:1px solid var(--brd);background:none;border-left:none;border-right:none;border-bottom:none;width:100%;font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--tx2);cursor:pointer;font-family:var(--font);transition:color .2s}
+    .sched-foot:hover{color:var(--acc)}
+    .sched-foot svg{width:13px;height:13px}
+
+    /* PYONGYANG TIME HERO CLOCK */
+    .pt-clock{margin-top:12px;background:var(--surf);border:1px solid var(--brd2);border-left:3px solid var(--acc);border-radius:var(--rxl);padding:20px 24px}
+    .pt-clock-lbl{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--tx2);margin-bottom:10px}
+    .pt-clock-sq{width:8px;height:8px;background:var(--acc);border-radius:2px;flex-shrink:0}
+    .pt-clock-digits{font-family:var(--mono);font-size:44px;font-weight:700;color:var(--tx);letter-spacing:1px;line-height:1;font-variant-numeric:tabular-nums}
+    .pt-clock-tz{font-size:12px;color:var(--tx3);margin-top:8px;font-family:var(--mono);letter-spacing:.5px}
+
+    /* EPG STATES */
+    .epg-sw{background:var(--surf);border:1px solid var(--brd);border-radius:var(--rxl);padding:44px 20px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px}
+    .epg-si{font-size:34px}
+    .epg-sm{font-size:13px;color:var(--tx2)}
+    .epg-retry{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--acc);background:rgba(226,71,43,.10);border:1px solid rgba(226,71,43,.22);padding:7px 16px;border-radius:100px;cursor:pointer;font-family:var(--font);transition:background .2s}
+    .epg-retry:hover{background:rgba(226,71,43,.18)}
+
+    /* SKELETON LOADING STATE */
+    @keyframes skelShimmer{0%{background-position:-260px 0}100%{background-position:calc(260px + 100%) 0}}
+    .skel-block{background:linear-gradient(90deg,var(--surf3) 25%,var(--surf2) 37%,var(--surf3) 63%);background-size:420px 100%;background-repeat:no-repeat;border-radius:5px;animation:skelShimmer 1.6s ease-in-out infinite}
+    .sched-row.skel-row{pointer-events:none}
+    .sched-row.skel-row.skel-onair::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--surf3)}
+
+    /* KJU ACTIVITIES — exclusive highlight (KCTV convention: red) */
+    @keyframes kjuGlow{0%,100%{box-shadow:0 0 6px rgba(224,32,26,.35),inset 0 0 0 1px rgba(224,32,26,.32)}50%{box-shadow:0 0 16px rgba(224,32,26,.65),inset 0 0 0 1px rgba(224,32,26,.58)}}
+    .sched-row.kju,.epg-fr.kju{background:linear-gradient(90deg,rgba(224,32,26,.12) 0%,rgba(224,32,26,.02) 70%);animation:kjuGlow 2.6s ease-in-out infinite}
+    .sched-row.kju::before,.epg-fr.kju::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(var(--kju2),var(--kju));box-shadow:0 0 10px rgba(224,32,26,.65)}
+    .kju-badge{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;color:#fff;background:var(--kju);box-shadow:0 0 8px rgba(224,32,26,.5);padding:3px 9px 3px 7px;border-radius:100px;margin-bottom:4px}
+    .kju-badge svg{width:11px;height:11px;flex-shrink:0}
+    .sched-row.kju .sched-ttl{font-weight:700;color:var(--kju2)}
+    .epg-fr.kju .epg-ftitle{font-weight:700;color:var(--kju2)}
+    .skel-badge{width:56px;height:9px;margin-bottom:7px}
+    .skel-cat{width:74px;height:9px;margin-bottom:7px}
+    .skel-ttl{height:13px;margin-bottom:6px}
+    .skel-sub{height:10px}
+    .skel-foot{height:11px;width:130px;margin:14px auto}
+    .skel-clock-lbl{width:120px;height:10px;margin-bottom:14px}
+    .skel-clock-digits{width:230px;height:38px;margin-bottom:9px}
+    .skel-clock-tz{width:54px;height:10px}
+
+    /* ABOUT */
+    .vpn-notice{display:flex;align-items:flex-start;gap:12px;background:rgba(239,196,76,.10);border:1px solid rgba(239,196,76,.35);border-radius:var(--rlg);padding:14px 16px;margin-bottom:20px}
+    .vpn-notice svg{width:20px;height:20px;flex-shrink:0;color:var(--gld);margin-top:1px}
+    .vpn-notice-body{font-size:13px;line-height:1.55;color:var(--tx)}
+    .vpn-notice-body strong{color:var(--gld);font-weight:700}
+    .about{margin-top:28px;background:var(--surf);border:1px solid var(--brd);border-radius:var(--rxl);padding:22px 24px}
+    .about h3{font-size:14px;font-weight:800;margin-bottom:8px;color:var(--tx);letter-spacing:-.2px}
+    .about p{font-size:13px;color:var(--tx2);line-height:1.75}
+
+    /* FOOTER */
+    .ft{max-width:1160px;width:100%;margin:0 auto;padding:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:12px;color:var(--tx3);border-top:1px solid var(--brd)}
+    .ft a{color:var(--tx3);text-decoration:none;transition:color .2s}
+    .ft a:hover{color:var(--acc)}
+
+    /* EPG OVERLAY */
+    .epg-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.90);z-index:9999;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);flex-direction:column;align-items:center;justify-content:center;padding:20px;opacity:0;transition:opacity .3s}
+    .epg-ov.show{display:flex;opacity:1}
+    .epg-ov-inn{display:flex;flex-direction:column;width:100%;max-width:760px;max-height:92vh;background:var(--surf);border:1px solid var(--brd2);border-radius:var(--rxl);overflow:hidden;box-shadow:var(--shlg);transform:translateY(20px) scale(.96);transition:transform .35s cubic-bezier(.32,.72,0,1)}
+    .epg-ov.show .epg-ov-inn{transform:none}
+    .epg-ov-hdr{display:flex;align-items:center;justify-content:space-between;padding:18px 22px 16px;border-bottom:1px solid var(--brd);flex-shrink:0}
+    .epg-ov-ttl{font-size:16px;font-weight:800;letter-spacing:-.4px;display:flex;align-items:center;gap:10px}
+    .epg-ov-meta{display:flex;align-items:center;gap:10px}
+    .epg-ov-close{width:30px;height:30px;border-radius:50%;background:var(--surf2);border:none;cursor:pointer;color:var(--tx2);display:flex;align-items:center;justify-content:center;transition:background .15s}
+    .epg-ov-close:hover{background:var(--surf3)}
+    .epg-ov-close svg{width:14px;height:14px}
+    .epg-ov-body{overflow-y:auto;flex:1}
+    .epg-ov-body::-webkit-scrollbar{width:5px}
+    .epg-ov-body::-webkit-scrollbar-thumb{background:var(--surf3);border-radius:4px}
+    .epg-fr{display:flex;align-items:flex-start;gap:14px;padding:13px 22px;border-bottom:1px solid var(--brd);transition:background .15s;cursor:pointer;position:relative}
+    .epg-fr:last-child{border-bottom:none}
+    .epg-fr.epg-past{opacity:.35}
+    .epg-fr.epg-cur{background:linear-gradient(90deg,rgba(125,218,143,.09) 0%,transparent 100%)}
+    .epg-fr:hover{background:var(--surf2)}
+    .epg-ft{flex-shrink:0;width:52px;font-size:12px;font-weight:700;color:var(--tx3);font-variant-numeric:tabular-nums;padding-top:2px}
+    .epg-fr.epg-cur .epg-ft{color:var(--grn)}
+    .epg-fd{flex-shrink:0;margin-top:7px;width:8px;height:8px;border-radius:50%;background:var(--surf3)}
+    .epg-fr.epg-cur .epg-fd{background:var(--grn);box-shadow:0 0 8px var(--grn);animation:blink 2s ease infinite}
+    .epg-fb{flex:1;min-width:0}
+    .epg-ftitle{font-size:14px;font-weight:700;color:var(--tx);line-height:1.4;margin-bottom:3px}
+    .epg-fr.epg-past .epg-ftitle{color:var(--tx2)}
+    .epg-ftags{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+    .epg-fcat{font-size:11px;font-weight:600;color:var(--tint);background:rgba(201,138,75,.12);padding:2px 8px;border-radius:100px}
+    .epg-fsub{font-size:12px;color:var(--tx3);line-height:1.4;margin-top:2px;margin-bottom:5px}
+    .epg-fsub:empty{display:none;margin:0}
+    .epg-fend{flex-shrink:0;font-size:12px;color:var(--tx3);font-variant-numeric:tabular-nums;padding-top:2px;text-align:right}
+    .epg-fdur{font-size:10px;color:var(--tx3);margin-top:2px}
+    .epg-kbd{padding:10px 22px;border-top:1px solid var(--brd);text-align:center;flex-shrink:0}
+    .kbd-hint{font-size:11px;color:var(--tx3);display:inline-flex;align-items:center;gap:4px}
+    .kbd{display:inline-block;padding:1px 6px;font-size:10px;font-weight:700;font-family:var(--font);color:var(--tx2);background:var(--surf2);border:1px solid var(--brd2);border-radius:4px;box-shadow:0 1px 0 var(--brd2)}
+    .plyr:fullscreen .epg-ov,.plyr:-webkit-full-screen .epg-ov{position:fixed;inset:0;z-index:999999}
+
+    /* EXPLORE VIDEOS SECTION */
+    .ev-sec{margin-top:36px;padding-top:28px;border-top:1px solid var(--brd)}
+    .ev-hdr{margin-bottom:16px}
+    .ev-pill{font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;padding:3px 9px;border-radius:100px;display:inline-block;margin-bottom:10px}
+    .ev-ttl{font-size:22px;font-weight:900;letter-spacing:-.4px;line-height:1.2;margin-bottom:6px}
+    .ev-sub{font-size:13px;color:var(--tx2);line-height:1.5;max-width:640px}
+    .ev-row-wrap{position:relative}
+    .ev-row{display:flex;gap:14px;overflow-x:auto;scroll-behavior:smooth;padding:4px 2px 14px;scrollbar-width:thin}
+    .ev-row::-webkit-scrollbar{height:6px}
+    .ev-row::-webkit-scrollbar-thumb{background:var(--surf3);border-radius:4px}
+    .ev-card{flex:0 0 auto;width:230px;background:var(--surf);border-radius:var(--rlg);overflow:hidden;text-decoration:none;color:inherit;display:block;transition:transform .18s ease,box-shadow .18s ease;border:1px solid var(--brd)}
+    .ev-card:hover{transform:translateY(-4px);box-shadow:var(--shmd);border-color:var(--brd2)}
+    .ev-thumb{position:relative;aspect-ratio:16/9;background:linear-gradient(160deg,var(--surf2),var(--surf3));overflow:hidden}
+    .ev-thumb img{width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity .3s ease}
+    .ev-thumb img.ready{opacity:1}
+    .ev-thumb .ph-icon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--brd2)}
+    .ev-thumb .ph-icon svg{width:26px;height:26px}
+    .ev-cat-chip{position:absolute;top:8px;left:8px;font-size:9.5px;font-weight:800;letter-spacing:.3px;text-transform:uppercase;padding:4px 9px;border-radius:100px;background:rgba(10,10,15,.78);backdrop-filter:blur(4px);color:var(--tx);max-width:calc(100% - 16px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .ev-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0);transition:background .18s ease}
+    .ev-card:hover .ev-play{background:rgba(0,0,0,.38)}
+    .ev-play-icon{width:40px;height:40px;border-radius:50%;background:var(--acc);display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(.8);transition:opacity .18s ease,transform .18s ease;box-shadow:var(--shmd)}
+    .ev-card:hover .ev-play-icon{opacity:1;transform:scale(1)}
+    .ev-play-icon svg{width:15px;height:15px;color:#fff;margin-left:2px}
+    .ev-body{padding:11px 12px 13px}
+    .ev-title{font-size:13px;font-weight:700;line-height:1.35;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.7em}
+    .ev-meta{font-size:11px;color:var(--tx2);display:flex;align-items:center;gap:5px}
+    .ev-meta svg{width:12px;height:12px;flex-shrink:0}
+    .ev-state{padding:36px 20px;text-align:center;color:var(--tx2);width:100%}
+    .ev-state svg{width:30px;height:30px;margin-bottom:10px;color:var(--brd2)}
+    .ev-state p{font-size:13px}
+    .ev-state .spin{animation:evspin 1s linear infinite}
+    @keyframes evspin{to{transform:rotate(360deg)}}
+    .ev-more{margin-top:14px;text-align:right}
+    .ev-more a{font-size:12.5px;font-weight:700;color:var(--acc);text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+    .ev-more a:hover{text-decoration:underline}
+    .ev-more a svg{width:14px;height:14px}
+    @media(max-width:640px){
+      .ev-ttl{font-size:18px}
+      .ev-card{width:172px}
+    }
+
+    /* DESKTOP GRID LAYOUT */
+    .dsk-grid{display:block}
+    .col-main{min-width:0}
+    .col-side{min-width:0;margin-top:28px}
+
+    @media(min-width:1020px){
+      .nav-inner{max-width:1480px}
+      .page{max-width:1480px;padding:32px 32px 72px}
+      .ft{max-width:1480px}
+      .ch-hdr{margin-bottom:28px;padding-bottom:24px}
+      .ch-logo{width:64px;height:64px}
+      .ch-name{font-size:30px}
+      .dsk-grid{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:32px;align-items:start}
+      .col-side{margin-top:0;position:sticky;top:78px;max-height:calc(100vh - 96px);overflow-y:auto;scrollbar-width:thin}
+      .col-side::-webkit-scrollbar{width:5px}
+      .col-side::-webkit-scrollbar-thumb{background:var(--surf3);border-radius:4px}
+      #dplayer{aspect-ratio:16/9}
+      .sched-list{max-height:calc(100vh - 430px);min-height:220px}
+      .rw-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+      .action-row{flex-wrap:nowrap}
+    }
+    @media(min-width:1320px){
+      .nav-inner{max-width:1600px}
+      .page{max-width:1600px}
+      .ft{max-width:1600px}
+      .dsk-grid{grid-template-columns:minmax(0,1fr) 440px}
+    }
+
+    /* Forces the desktop two-column layout for devices we detect as desktop via JS,
+       even if the viewport happens to be narrower than the width breakpoints above. */
+    body.is-desktop .nav-inner{max-width:1480px}
+    body.is-desktop .page{max-width:1480px;padding:32px 32px 72px}
+    body.is-desktop .ft{max-width:1480px}
+    body.is-desktop .ch-hdr{margin-bottom:28px;padding-bottom:24px}
+    body.is-desktop .ch-logo{width:64px;height:64px}
+    body.is-desktop .ch-name{font-size:30px}
+    body.is-desktop .dsk-grid{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:32px;align-items:start}
+    body.is-desktop .col-side{margin-top:0;position:sticky;top:78px;max-height:calc(100vh - 96px);overflow-y:auto;scrollbar-width:thin}
+    body.is-desktop .col-side::-webkit-scrollbar{width:5px}
+    body.is-desktop .col-side::-webkit-scrollbar-thumb{background:var(--surf3);border-radius:4px}
+    body.is-desktop #dplayer{aspect-ratio:16/9}
+    body.is-desktop .sched-list{max-height:calc(100vh - 430px);min-height:220px}
+    body.is-desktop .rw-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+    body.is-desktop .action-row{flex-wrap:nowrap}
+
+    @media(max-width:640px){
+      .ch-name{font-size:20px}
+      .action-row{flex-direction:column}
+      .btn{justify-content:center}
+      .sched-list{max-height:280px}
+      .pt-clock-digits{font-size:34px}
+      .epg-ov{padding:8px}
+      .epg-ov-inn{max-height:96vh}
+      .page{padding:16px 12px 48px}
+      .nav-lnk{display:none}
+      .rw-grid{grid-template-columns:repeat(3,1fr)}
+      .rw-date-btn{padding:7px 12px;font-size:11px}
+    }
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="logo">
+      <div class="logo-mark"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+      <span class="logo-text">Blocky Tom</span>
+    </a>
+    <div class="nav-r">
+      <button class="nav-lnk active" data-ch="tv" onclick="window._switchChannel('tv')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M17 2 12 7 7 2"/></svg>
+        <span>Amdo TV</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE -->
+<main class="page">
+
+  <div class="vpn-notice">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    <div class="vpn-notice-body"><strong>Notice:</strong> This stream is only reachable from a Chinese IP address. If playback fails or hangs, connect to a <strong>China-based VPN server</strong> and reload the page.</div>
+  </div>
+
+  <div class="ch-hdr">
+    <div class="ch-logo" style="font-size:26px">&#128250;</div>
+    <div class="ch-info">
+      <div class="ch-name" id="chName">Qinghai Amdo Language Television</div>
+      <div class="ch-sub">Live from Qinghai, China &middot; Qinghai Tibetan Radio &amp; TV Station (qhtb.cn).</div>
+    </div>
+  </div>
+
+  <!-- PLAYER -->
+  <div class="player-wrap" id="playerWrap">
+    <div id="dplayer"></div>
+  </div>
+
+  <div class="action-row">
+    <button class="btn pri" onclick="window._backToLive && window._backToLive()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+      Back to Live
+    </button>
+    <button class="btn" onclick="window._loadSchedule && window._loadSchedule()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="3"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Refresh Schedule
+    </button>
+  </div>
+
+  <!-- PROGRAM SCHEDULE / RECORDINGS SECTION (replaces EPG) -->
+  <div class="rw-sec" id="rwSection">
+    <div class="rw-hdr">
+      <div class="rw-ttl">
+        <span class="rw-pill">Program</span>
+        <span class="rw-name">Schedule &amp; Recordings</span>
+      </div>
+    </div>
+    <p class="epg-src-note">Browse programs by date. Click any on-air or past slot to watch it &mdash; the API returns that program's own stream URL. Future slots aren't playable yet.</p>
+
+    <!-- Loading -->
+    <div id="rwLoading">
+      <div class="sched-card">
+        <div class="sched-hdr">
+          <div class="skel-block" style="width:180px;height:13px"></div>
+          <div class="skel-block" style="width:92px;height:11px"></div>
+        </div>
+        <div style="padding:16px 20px">
+          <div class="skel-block" style="width:200px;height:28px;margin-bottom:14px;border-radius:100px"></div>
+          <div class="rw-grid">
+            <div class="skel-block" style="height:60px;border-radius:10px"></div>
+            <div class="skel-block" style="height:60px;border-radius:10px"></div>
+            <div class="skel-block" style="height:60px;border-radius:10px"></div>
+            <div class="skel-block" style="height:60px;border-radius:10px"></div>
+            <div class="skel-block" style="height:60px;border-radius:10px"></div>
+            <div class="skel-block" style="height:60px;border-radius:10px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Error -->
+    <div id="rwError" style="display:none">
+      <div class="rw-sw">
+        <div class="epg-si">&#x26A0;&#xFE0F;</div>
+        <div class="epg-sm" id="rwErrorMsg">Failed to load recordings.</div>
+        <button class="epg-retry" id="rwRetryBtn">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          Retry
+        </button>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div id="rwContent" style="display:none">
+      <div class="sched-card">
+        <div class="sched-hdr">
+          <div class="sched-hdr-ttl">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span id="rwCardTitle">Recordings</span>
+          </div>
+          <div class="sched-hdr-kst" id="rwTotalCount">0 recordings</div>
+        </div>
+        <div style="padding:16px 20px 20px">
+          <div class="rw-dates" id="rwDateTabs"></div>
+          <div class="rw-grid" id="rwGrid"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <div class="about">
+    <h3>About Qinghai Amdo Language Television</h3>
+    <p>Qinghai Amdo Language Television (Qinghai Tibetan Radio &amp; TV Station, qhtb.cn) broadcasts Tibetan-language news, cultural programs, and entertainment from Qinghai, China. This is an unofficial test player, not affiliated with qhtb.cn.</p>
+  </div>
+
+
+
+</main>
+
+
+
+<!-- FOOTER -->
+<footer class="ft">
+  <span>Blocky Tom's Personal Website &mdash; Test Build. Not for public release!</span>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.7/dist/hls.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.min.js"></script>
+<script>
+(function(){'use strict';
+  var APP_SECRET='069486993db4acc22c846557c8880d9a';
+  var CHANNELS={
+    tv:{id:'824587377543962624',name:'Amdo TV'}
+  };
+  var currentChannelKey='tv';
+  var hlsInstance=null;
+  var isLiveMode=true;
+  var TV_COVER_IMG='';
+  var isIOS=(function(){
+    var ua=navigator.userAgent||'';
+    if(/iPad|iPhone|iPod/.test(ua))return true;
+    if(/Macintosh/.test(ua)&&navigator.maxTouchPoints&&navigator.maxTouchPoints>1)return true;
+    return false;
+  })();
+
+  var isDesktopDevice=(function(){
+    var ua=navigator.userAgent||'';
+    if(/Mobi|Android|iPhone|iPod|iPad|BlackBerry|IEMobile|Opera Mini/i.test(ua))return false;
+    if(/Macintosh/.test(ua)&&navigator.maxTouchPoints&&navigator.maxTouchPoints>1)return false;
+    return true;
+  })();
+  if(isDesktopDevice&&document.body)document.body.classList.add('is-desktop');
+  window._kctvIsDesktop=isDesktopDevice;
+
+  function destroyPlayer(){
+    if(window._dpInstance){try{window._dpInstance.destroy();}catch(e){}window._dpInstance=null;}
+    if(hlsInstance){try{hlsInstance.destroy();}catch(e){}hlsInstance=null;}
+    var c=document.getElementById('dplayer');if(c)c.innerHTML='';
+  }
+
+  function buildVideoEl(poster){
+    var v=document.createElement('video');
+    v.id='dplayerVideo';
+    v.playsInline=true;
+    v.setAttribute('webkit-playsinline','');
+    v.setAttribute('poster',poster||'');
+    v.volume=1.0;
+    return v;
+  }
+
+  function disableLongPress(){
+    var wrap=document.getElementById('dplayer');
+    if(!wrap)return;
+    wrap.addEventListener('contextmenu',function(e){e.preventDefault();},{passive:false});
+    var video=wrap.querySelector('video');
+    if(video)video.addEventListener('contextmenu',function(e){e.stopPropagation();e.preventDefault();},{passive:false,capture:true});
+  }
+
+  function addLiveBadge(player){
+    try{
+      var controls=player.elements.controls;
+      if(!controls||controls.querySelector('.live-badge'))return;
+      var badge=document.createElement('div');
+      badge.className='live-badge';
+      badge.innerHTML='<span class="live-dot"></span>LIVE<span class="live-spinner"></span>';
+      var playBtn=controls.querySelector('[data-plyr="play"]');
+      var anchor=playBtn;
+      while(anchor&&anchor.parentNode!==controls)anchor=anchor.parentNode;
+      if(anchor)controls.insertBefore(badge,anchor.nextSibling);
+      else controls.insertBefore(badge,controls.firstChild);
+      var spinner=badge.querySelector('.live-spinner');
+      var media=player.media;
+      if(spinner&&media){
+        var showSpin=function(){spinner.style.display='inline-block';};
+        var hideSpin=function(){spinner.style.display='none';};
+        media.addEventListener('waiting',showSpin);
+        media.addEventListener('stalled',showSpin);
+        media.addEventListener('playing',hideSpin);
+        media.addEventListener('canplay',hideSpin);
+        if(!media.paused&&media.readyState>2)hideSpin();
+      }
+    }catch(e){}
+  }
+
+  var LIVE_CONTROLS=['play-large','play','mute','volume','captions','settings','pip','airplay','fullscreen'];
+  var VOD_CONTROLS=['play-large','rewind','play','fast-forward','progress','current-time','duration','mute','volume','captions','settings','pip','airplay','fullscreen'];
+
+  function createPlyr(video,isLive,qualityCfg){
+    var opts={
+      controls:isLive?LIVE_CONTROLS:VOD_CONTROLS,
+      settings:qualityCfg?['quality','speed']:['speed'],
+      autoplay:true,
+      clickToPlay:true,
+      keyboard:{focused:true,global:true},
+      tooltips:{controls:true,seek:true},
+      seekTime:10,
+      volume:1,
+      disableContextMenu:true,
+      fullscreen:{enabled:true,fallback:true,iosNative:true}
+    };
+    if(qualityCfg)opts.quality=qualityCfg;
+    var player=new Plyr(video,opts);
+    if(isLive)player.once('ready',function(){addLiveBadge(player);});
+    return player;
+  }
+
+  function loadLiveSource(video,url,onReady){
+    if(window.Hls&&Hls.isSupported()){
+      hlsInstance=new Hls({lowLatencyMode:false,maxBufferLength:30,maxMaxBufferLength:60,maxBufferSize:30*1000*1000,enableWorker:true});
+      hlsInstance.loadSource(url);
+      hlsInstance.attachMedia(video);
+      hlsInstance.on(Hls.Events.MANIFEST_PARSED,function(ev,data){
+        var qualityCfg=null;
+        if(data&&data.levels&&data.levels.length>1){
+          var heights=data.levels.map(function(l){return l.height;}).filter(function(h,i,a){return h&&a.indexOf(h)===i;}).sort(function(a,b){return b-a;});
+          qualityCfg={
+            default:0,
+            options:[0].concat(heights),
+            forced:true,
+            onChange:function(newQuality){
+              if(!hlsInstance)return;
+              if(newQuality===0){hlsInstance.currentLevel=-1;return;}
+              hlsInstance.levels.forEach(function(level,i){if(level.height===newQuality)hlsInstance.currentLevel=i;});
+            }
+          };
+        }
+        if(onReady)onReady(qualityCfg);
+        video.play().catch(function(){});
+      });
+      hlsInstance.on(Hls.Events.ERROR,function(ev,data){
+        if(data.fatal){switch(data.type){
+          case Hls.ErrorTypes.NETWORK_ERROR:hlsInstance.startLoad();break;
+          case Hls.ErrorTypes.MEDIA_ERROR:hlsInstance.recoverMediaError();break;
+          default:
+            hlsInstance.destroy();hlsInstance=null;
+            setTimeout(function(){if(video&&video.isConnected)loadLiveSource(video,url,function(){});},5000);
+        }}
+      });
+    }else if(video.canPlayType('application/vnd.apple.mpegurl')){
+      video.src=url;
+      video.addEventListener('loadedmetadata',function(){video.play().catch(function(){});},{once:true});
+      if(onReady)onReady(null);
+    }
+  }
+
+  /* fetch the current live m3u8 for a channel from the qhtb.cn API */
+  function fetchLiveUrl(channelId,cb){
+    var params=new URLSearchParams({app_secret:APP_SECRET,tenant_id:'0',id:channelId});
+    fetch('https://mapi.qhbtv.com.cn/cloudlive-manage-mapi/api/topic/detail?'+params)
+      .then(function(r){return r.json();})
+      .then(function(data){
+        if(data.topic_camera&&data.topic_camera.length>0&&data.topic_camera[0].streams&&data.topic_camera[0].streams.length>0){
+          var stream=data.topic_camera[0].streams[0];
+          cb(stream.hls,data.indexpic||'');
+        }else{
+          cb(null,null);
+        }
+      })
+      .catch(function(){cb(null,null);});
+  }
+
+  function initPlayer(channelKey){
+    currentChannelKey=channelKey;
+    var ch=CHANNELS[channelKey];if(!ch)return;
+    destroyPlayer();
+    isLiveMode=true;
+    fetchLiveUrl(ch.id,function(url,poster){
+      if(!url)return;
+      if(poster)TV_COVER_IMG=poster;
+      var wrap=document.getElementById('dplayer');
+      var video=buildVideoEl(TV_COVER_IMG);
+      wrap.appendChild(video);
+      disableLongPress();
+      loadLiveSource(video,url,function(qualityCfg){
+        window._dpInstance=createPlyr(video,true,qualityCfg);
+      });
+      document.dispatchEvent(new CustomEvent('dplayer:reinit'));
+    });
+  }
+
+  function playRecording(url,label){
+    destroyPlayer();
+    isLiveMode=false;
+    var wrap=document.getElementById('dplayer');
+    var video=buildVideoEl(TV_COVER_IMG);
+    wrap.appendChild(video);
+    disableLongPress();
+    video.src=url;
+    window._dpInstance=createPlyr(video,false,null);
+    video.play().catch(function(){});
+    document.dispatchEvent(new CustomEvent('dplayer:reinit'));
+  }
+  window._playRecording=playRecording;
+  window._kctvIsLive=function(){return isLiveMode;};
+  window._kctvIsIOS=isIOS;
+
+  function backToLive(){
+    initPlayer(currentChannelKey);
+    document.querySelectorAll('.rw-card.playing').forEach(function(c){c.classList.remove('playing');});
+  }
+  window._backToLive=backToLive;
+
+  function switchChannel(channelKey){
+    if(!CHANNELS[channelKey])return;
+    initPlayer(channelKey);
+    var nameEl=document.getElementById('chName');
+    if(nameEl)nameEl.textContent=CHANNELS[channelKey].name;
+    document.querySelectorAll('.nav-lnk[data-ch]').forEach(function(b){b.classList.toggle('active',b.dataset.ch===channelKey);});
+    if(window._loadSchedule)window._loadSchedule();
+  }
+  window._switchChannel=switchChannel;
+  window._kctvCurrentChannel=function(){return currentChannelKey;};
+
+  function _init(){
+    initPlayer('tv');
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',_init);else _init();
+  window._kctvInitPlayer=initPlayer;window._kctvActiveChannel=function(){return currentChannelKey;};window._kctvHls=function(){return hlsInstance;};
+  window._kctvDestroyPlayer=destroyPlayer;window._kctvTvCoverImg=function(){return TV_COVER_IMG;};
+
+})();
+</script>
+
+<script>
+/* PROGRAM SCHEDULE / RECORDINGS -- sourced from qhtb.cn program/list API (replaces the KCTV hour-rewind system) */
+(function(){
+  var APP_SECRET='069486993db4acc22c846557c8880d9a';
+  var CHANNELS={
+    tv:{id:'824587377543962624'}
+  };
+
+  var allDates=[];
+  var currentDate='';
+  var programsByDate={};
+
+  function todayStr(){return new Date().toISOString().split('T')[0];}
+  function pastDates(n){
+    var out=[];
+    for(var i=0;i<n;i++){
+      var d=new Date();
+      d.setDate(d.getDate()-i);
+      out.push(d.toISOString().split('T')[0]);
+    }
+    return out;
+  }
+  function parseDateLabel(ds){
+    var p=ds.split('-');
+    var d=new Date(+p[0],+p[1]-1,+p[2]);
+    var days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    var months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return days[d.getDay()]+', '+d.getDate()+' '+months[d.getMonth()]+' '+d.getFullYear();
+  }
+  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+
+  function showRwLoading(){document.getElementById('rwLoading').style.display='';document.getElementById('rwError').style.display='none';document.getElementById('rwContent').style.display='none';}
+  function showRwError(msg){document.getElementById('rwLoading').style.display='none';document.getElementById('rwError').style.display='';document.getElementById('rwErrorMsg').textContent=msg||'Failed to load schedule.';document.getElementById('rwContent').style.display='none';}
+  function showRwContent(){document.getElementById('rwLoading').style.display='none';document.getElementById('rwError').style.display='none';document.getElementById('rwContent').style.display='';}
+
+  function renderDateTabs(){
+    var container=document.getElementById('rwDateTabs');
+    container.innerHTML='';
+    allDates.forEach(function(ds){
+      var btn=document.createElement('button');
+      btn.className='rw-date-btn'+(ds===currentDate?' on':'');
+      btn.textContent=parseDateLabel(ds);
+      btn.addEventListener('click',function(){currentDate=ds;renderDateTabs();ensureLoaded(currentDate,renderGrid);});
+      container.appendChild(btn);
+    });
+  }
+
+  function renderGrid(){
+    var container=document.getElementById('rwGrid');
+    container.innerHTML='';
+    var programs=programsByDate[currentDate]||[];
+
+    if(!programs.length){
+      container.innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--tx3);font-size:13px;padding:20px">No programs for this date.</div>';
+      document.getElementById('rwTotalCount').textContent='0 programs on '+parseDateLabel(currentDate);
+      return;
+    }
+
+    var now=new Date();
+    var todayDS=todayStr();
+    var currentMinutes=now.getHours()*60+now.getMinutes();
+    var total=0;
+
+    programs.forEach(function(p){
+      var startTime=(p.start_time||'').substring(0,5);
+      var title=p.title||'Program';
+      var isFuture=false,isLive=false;
+      if(p.date===todayDS){
+        var h=parseInt((p.start_time||'00:00').substring(0,2));
+        var m=parseInt((p.start_time||'00:00').substring(3,5));
+        var mins=h*60+m;
+        if(p.time_status===1)isLive=true;
+        else if(mins>currentMinutes)isFuture=true;
+      }else if(p.date>todayDS){
+        isFuture=true;
+      }
+
+      var card=document.createElement('div');
+      card.className='rw-card'+(isLive?' available live':(isFuture?'':' available'));
+      card.innerHTML='<div class="rw-thumb" style="display:flex;align-items:center;justify-content:center;font-size:20px">&#128250;</div>'
+        +'<div class="rw-time">'+esc(startTime)+'</div>'
+        +'<div style="font-weight:600;color:var(--tx2);font-size:10px;margin-top:2px;line-height:1.3">'+esc(title)+'</div>';
+
+      if(isLive){
+        card.innerHTML+='<div class="rw-status">&#9679; LIVE</div>';
+        card.addEventListener('click',function(){if(typeof window._backToLive==='function')window._backToLive();});
+      }else if(isFuture){
+        card.innerHTML+='<div class="rw-status" style="color:var(--tx3)">Not aired yet</div>';
+      }else if(p.m3u8){
+        card.innerHTML+='<div class="rw-status">&#9654; Play</div>';
+        card.addEventListener('click',function(){playCard(p.m3u8,card,title);});
+      }else{
+        card.innerHTML+='<div class="rw-status" style="color:var(--tx3)">No recording</div>';
+      }
+      total++;
+      container.appendChild(card);
+    });
+    document.getElementById('rwTotalCount').textContent=total+' program'+(total!==1?'s':'')+' on '+parseDateLabel(currentDate);
+  }
+
+  function playCard(url,cardEl,title){
+    document.querySelectorAll('.rw-card.playing').forEach(function(c){c.classList.remove('playing');});
+    cardEl.classList.add('playing');
+    if(typeof window._playRecording==='function')window._playRecording(url,title);
+  }
+
+  function ensureLoaded(ds,cb){
+    if(programsByDate[ds]){cb();return;}
+    var chKey=(window._kctvCurrentChannel&&window._kctvCurrentChannel())||'tv';
+    var chId=(CHANNELS[chKey]||CHANNELS.tv).id;
+    var params=new URLSearchParams({topic_id:chId,date:ds,app_secret:APP_SECRET});
+    fetch('https://mapi.qhbtv.com.cn/cloudlive-manage-mapi/api/topic/program/list?'+params)
+      .then(function(r){return r.json();})
+      .then(function(response){
+        programsByDate[ds]=(response.error_code===200&&response.result)?response.result:[];
+        cb();
+      })
+      .catch(function(){programsByDate[ds]=[];cb();});
+  }
+
+  function loadSchedule(){
+    showRwLoading();
+    programsByDate={};
+    allDates=pastDates(7);
+    currentDate=allDates[0];
+    document.getElementById('rwCardTitle').textContent='Program List';
+    renderDateTabs();
+    ensureLoaded(currentDate,function(){
+      renderGrid();
+      showRwContent();
+    });
+  }
+  window._loadSchedule=loadSchedule;
+
+  document.getElementById('rwRetryBtn').addEventListener('click',loadSchedule);
+  loadSchedule();
+})();
+</script>
+
+</body>
+</html>

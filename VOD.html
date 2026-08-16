@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#141218">
+  <title>Blocky Tom's Personal Website VOD - Video On Demand</title>
+  <meta name="description" content="On-demand archive of DPRK broadcasts from Korean Central Television — news, culture, and revolutionary activities. Watch anytime.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Blocky Tom's Personal Website">
+  <meta property="og:title" content="Blocky Tom's Personal Website VOD - Video On Demand">
+  <meta property="og:description" content="On-demand archive of DPRK broadcasts. Watch anytime, anywhere.">
+  <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/en/a/ad/Korean_Central_Television_2005.svg">
+  <meta property="og:theme-color" content="#FF5449">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Blocky Tom's Personal Website VOD - Video On Demand">
+  <meta name="twitter:description" content="On-demand archive of DPRK broadcasts. Watch anytime, anywhere.">
+  <meta name="twitter:image" content="https://upload.wikimedia.org/wikipedia/en/a/ad/Korean_Central_Television_2005.svg">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700;900&display=swap');
+    :root {
+      --md-bg:#101014; --surface:#141218; --surface-container-low:#1A181E; --surface-container:#1D1B20;
+      --surface-container-high:#262429; --surface-container-highest:#2F2D33; --outline:#48454E; --outline-variant:#322F37;
+      --on-surface:#E6E1E5; --on-surface-variant:#A8A3AC;
+      --primary:#FF5449; --on-primary:#690003; --primary-container:#93000A; --on-primary-container:#FFDAD5;
+      --secondary:#A8C8FF; --secondary-container:#1E3A5C;
+      --tertiary:#EFC44C;
+      --shape-xs:8px; --shape-sm:12px; --shape-md:16px; --shape-lg:20px; --shape-xl:28px; --shape-full:999px;
+      --elev-1:0 1px 2px rgba(0,0,0,.45),0 1px 3px 1px rgba(0,0,0,.25);
+      --elev-2:0 1px 2px rgba(0,0,0,.5),0 3px 8px 1px rgba(0,0,0,.3);
+    }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html{scroll-behavior:smooth}
+    body{font-family:'Roboto',system-ui,sans-serif;background:var(--md-bg);color:var(--on-surface);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+    .nav{position:sticky;top:0;z-index:100;background:var(--surface);border-bottom:1px solid var(--outline-variant)}
+    .nav-inner{max-width:1120px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:64px}
+    .logo{display:flex;align-items:center;gap:12px;font-size:19px;font-weight:700;color:var(--on-surface);text-decoration:none;padding:8px;border-radius:var(--shape-lg)}
+    .logo-icon{width:36px;height:36px;background:var(--primary-container);border-radius:var(--shape-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .logo-icon svg{color:var(--on-primary-container)}
+    .nav-links{display:flex;align-items:center;gap:4px}
+    .nav-link{display:flex;align-items:center;gap:8px;height:40px;padding:0 16px;border-radius:var(--shape-full);color:var(--on-surface-variant);text-decoration:none;font-size:13.5px;font-weight:600;transition:background .15s,color .15s}
+    .nav-link svg{width:18px;height:18px}
+    .nav-link:hover{background:var(--surface-container-high);color:var(--on-surface)}
+    .nav-link.active{background:var(--primary-container);color:var(--on-primary-container)}
+
+    .main{max-width:1120px;margin:0 auto;padding:28px 20px 64px}
+    .hero{margin-bottom:20px}
+    .status-chip{display:inline-flex;align-items:center;gap:6px;background:var(--primary-container);color:var(--on-primary-container);font-size:12px;font-weight:700;padding:6px 12px 6px 10px;border-radius:var(--shape-full);margin-bottom:12px}
+    .status-chip .dot{width:7px;height:7px;border-radius:50%;background:var(--primary);animation:pulse 2s ease-in-out infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+    .hero h1{font-size:32px;font-weight:900;letter-spacing:-.5px;line-height:1.1;margin-bottom:8px}
+    .hero p{font-size:14px;color:var(--on-surface-variant);line-height:1.55;max-width:640px}
+
+    .vod-toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:20px}
+    .vod-toolbar-left{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    .result-count{font-size:12.5px;color:var(--on-surface-variant);white-space:nowrap}
+    .search-field{display:flex;align-items:center;gap:8px;background:var(--surface-container);border:1px solid var(--outline-variant);border-radius:var(--shape-full);padding:0 16px;height:44px;min-width:220px;transition:border-color .15s,background .15s}
+    .search-field:focus-within{border-color:var(--primary);background:var(--surface-container-high)}
+    .search-field svg{width:18px;height:18px;color:var(--on-surface-variant);flex-shrink:0}
+    .search-field input{background:none;border:none;outline:none;color:var(--on-surface);font-size:13.5px;width:100%;font-family:inherit}
+    .search-field input::placeholder{color:var(--on-surface-variant)}
+
+    .dd{position:relative}
+    .dd-trigger{display:flex;align-items:center;gap:10px;height:44px;padding:0 14px 0 16px;background:var(--surface-container);border:1px solid var(--outline-variant);border-radius:var(--shape-full);color:var(--on-surface);font-size:13.5px;font-weight:600;cursor:pointer;min-width:200px;justify-content:space-between;transition:background .15s,border-color .15s;user-select:none}
+    .dd-trigger:hover{background:var(--surface-container-high)}
+    .dd.open .dd-trigger{border-color:var(--primary);background:var(--surface-container-high)}
+    .dd-trigger .dd-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .dd-trigger svg.chev{width:16px;height:16px;color:var(--on-surface-variant);flex-shrink:0;transition:transform .2s}
+    .dd.open .dd-trigger svg.chev{transform:rotate(180deg)}
+    .dd-menu{position:absolute;top:calc(100% + 6px);left:0;min-width:260px;max-width:340px;background:var(--surface-container-high);border:1px solid var(--outline-variant);border-radius:var(--shape-md);box-shadow:var(--elev-2);padding:6px;z-index:60;max-height:320px;overflow-y:auto;opacity:0;transform:translateY(-6px);pointer-events:none;transition:opacity .15s,transform .15s}
+    .dd.open .dd-menu{opacity:1;transform:translateY(0);pointer-events:auto}
+    .dd-option{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:var(--shape-sm);font-size:13px;cursor:pointer;color:var(--on-surface-variant)}
+    .dd-option span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .dd-option:hover{background:var(--surface-container-highest);color:var(--on-surface)}
+    .dd-option.selected{background:var(--primary-container);color:var(--on-primary-container);font-weight:700}
+    .dd-option .count{font-size:11px;opacity:.75;flex-shrink:0}
+
+    .vod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px}
+    .vcard{background:var(--surface-container);border-radius:var(--shape-lg);overflow:hidden;cursor:pointer;transition:transform .18s ease,box-shadow .18s ease;text-decoration:none;color:inherit;display:block}
+    .vcard:hover{transform:translateY(-4px);box-shadow:var(--elev-2)}
+    .vcard-thumb{position:relative;aspect-ratio:16/9;background:linear-gradient(160deg,var(--surface-container-high),var(--surface-container-highest));overflow:hidden}
+    .vcard-thumb img{width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity .3s ease}
+    .vcard-thumb img.ready{opacity:1}
+    .vcard-thumb .ph-icon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--outline)}
+    .vcard-thumb .ph-icon svg{width:28px;height:28px}
+    .vcard-cat-chip{position:absolute;top:8px;left:8px;font-size:9.5px;font-weight:800;letter-spacing:.3px;text-transform:uppercase;padding:4px 9px;border-radius:var(--shape-full);background:rgba(16,16,20,.78);backdrop-filter:blur(4px);color:var(--on-surface);max-width:calc(100% - 16px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .vcard-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0);transition:background .18s ease}
+    .vcard:hover .vcard-play{background:rgba(0,0,0,.38)}
+    .vcard-play-icon{width:44px;height:44px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(.8);transition:opacity .18s ease,transform .18s ease;box-shadow:var(--elev-2)}
+    .vcard:hover .vcard-play-icon{opacity:1;transform:scale(1)}
+    .vcard-play-icon svg{width:17px;height:17px;color:var(--on-primary);margin-left:2px}
+    .vcard-body{padding:12px 13px 15px}
+    .vcard-title{font-size:13.5px;font-weight:700;line-height:1.35;margin-bottom:7px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.7em}
+    .vcard-meta{font-size:11.5px;color:var(--on-surface-variant);display:flex;align-items:center;gap:6px}
+    .vcard-meta svg{width:12px;height:12px;flex-shrink:0}
+
+    .vod-empty,.vod-loading{grid-column:1/-1;text-align:center;padding:70px 20px;color:var(--on-surface-variant)}
+    .vod-empty svg,.vod-loading svg{width:38px;height:38px;margin-bottom:14px;color:var(--outline)}
+    .vod-empty p,.vod-loading p{font-size:13.5px}
+    .spin{animation:spin 1s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    .sentinel{grid-column:1/-1;height:1px}
+    .load-more-wrap{grid-column:1/-1;display:flex;justify-content:center;padding:10px 0 4px}
+    .load-more-btn{display:flex;align-items:center;gap:8px;height:42px;padding:0 20px;border-radius:var(--shape-full);border:1px solid var(--outline-variant);background:var(--surface-container);color:var(--on-surface);font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}
+    .load-more-btn:hover{background:var(--surface-container-high)}
+
+    .footer{max-width:1120px;margin:0 auto;padding:16px 20px 8px;text-align:center;font-size:11px;color:var(--on-surface-variant);opacity:.6;line-height:1.8}
+    ::-webkit-scrollbar{width:4px}
+    ::-webkit-scrollbar-track{background:transparent}
+    ::-webkit-scrollbar-thumb{background:var(--surface-container-highest);border-radius:4px}
+
+    @media (max-width:860px){
+      .nav-links .nav-link span{display:none}
+      .nav-link{padding:0 10px}
+    }
+    @media (max-width:600px){
+      .hero h1{font-size:26px}
+      .vod-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+      .vcard-title{font-size:12.5px;min-height:2.5em}
+      .vcard-body{padding:9px 10px 11px}
+      .vod-toolbar{gap:10px}
+      .dd-trigger,.search-field{min-width:0;flex:1}
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <div class="logo-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+        Blocky Tom
+      </a>
+      <div class="nav-links">
+        <a href="/" class="nav-link">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+          <span>Home</span>
+        </a>
+        <a href="/schedules" class="nav-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="3"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <span>Schedule</span>
+        </a>
+        <a href="/Magazine" class="nav-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          <span>Magazines</span>
+        </a>
+        <a href="/VOD.html" class="nav-link active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l1.2-3.6a1.5 1.5 0 0 1 1.9-.95l13.4 4.55"/><path d="M3 8.5V19a1.5 1.5 0 0 0 1.5 1.5h15A1.5 1.5 0 0 0 21 19V9.5A1.5 1.5 0 0 0 19.5 8H4.5A1.5 1.5 0 0 0 3 8.5z"/><path d="M7 5l3 3.5"/><path d="M12 3.8l3 3.5"/><path d="M3 8.5h18"/></svg>
+          <span>VOD</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="main">
+    <div class="hero">
+      <div class="status-chip"><span class="dot"></span>On-demand archive</div>
+      <h1>Video On Demand</h1>
+      <p>Recorded broadcasts from Korean Central Television — news, culture, and revolutionary activities.</p>
+    </div>
+
+    <div class="vod-toolbar">
+      <div class="vod-toolbar-left">
+        <div class="dd" id="catDropdown">
+          <div class="dd-trigger" id="ddTrigger" tabindex="0" role="button" aria-haspopup="listbox" aria-expanded="false">
+            <span class="dd-label" id="ddLabel">All categories</span>
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+          <div class="dd-menu" id="ddMenu" role="listbox"></div>
+        </div>
+        <div class="search-field">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="searchInput" placeholder="Search titles…" autocomplete="off">
+        </div>
+      </div>
+      <div class="result-count" id="resultCount"></div>
+    </div>
+
+    <div class="vod-grid" id="vodGrid">
+      <div class="vod-loading">
+        <svg class="spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+        <p>Loading archive…</p>
+      </div>
+    </div>
+
+    <footer class="footer">
+      &copy; Blocky Tom's Personal Website &mdash; Not affiliated with any broadcasting entity.<br>
+      Built and run by Tom, independently. Streams owned by Bloxy Play Comprehensive Channel.
+    </footer>
+  </main>
+
+  <script>
+    (function () {
+      const API = 'https://kctv.koryofront.org/api/media-list';
+      const ORIGIN = 'https://kctv.koryofront.org';
+      const THUMB_API = 'https://koryofront.org/api/kctv/thumb';
+      const BATCH_SIZE = 24;
+
+      let ALL = [];
+      let CATS = [];
+      let currentList = [];
+      let renderedCount = 0;
+
+      const state = { category: 'All', query: '' };
+
+      const grid = document.getElementById('vodGrid');
+      const ddWrap = document.getElementById('catDropdown');
+      const ddTrigger = document.getElementById('ddTrigger');
+      const ddLabel = document.getElementById('ddLabel');
+      const ddMenu = document.getElementById('ddMenu');
+      const searchInput = document.getElementById('searchInput');
+      const resultCount = document.getElementById('resultCount');
+
+      function shortId(str) {
+        let h = 0x811c9dc5;
+        for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 0x01000193); }
+        return (h >>> 0).toString(36);
+      }
+      function escapeHtml(s) {
+        return String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+      }
+      function formatDate(d) {
+        try { return new Date(d + 'T00:00:00').toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' }); }
+        catch (e) { return d; }
+      }
+      function thumbUrl(v) {
+        const path = '/recordings/' + v.category + '/' + v.filename;
+        return THUMB_API + '?path=' + encodeURI(path) + '&t=5';
+      }
+      function genDescription(v) {
+        return 'Watch "' + v.title + '," a ' + v.category + ' broadcast from Korean Central Television, originally aired ' + formatDate(v.date) + '. Streamed on-demand on Blocky Tom\'s Personal Website, an archive of DPRK television.';
+      }
+
+      async function loadData() {
+        try {
+          const res = await fetch(API);
+          if (!res.ok) throw new Error('fetch failed');
+          const data = await res.json();
+          CATS = Object.keys(data);
+          ALL = [];
+          CATS.forEach(cat => {
+            (data[cat] || []).forEach(item => {
+              const id = shortId(cat + '|' + item.filename);
+              ALL.push({
+                id, category: item.category || cat, title: item.title, date: item.date,
+                filename: item.filename,
+                fullUrl: ORIGIN + item.url, fullDownload: ORIGIN + item.download
+              });
+            });
+          });
+          buildDropdown();
+          applyFilter();
+        } catch (e) {
+          grid.innerHTML = '<div class="vod-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="13"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><p>Couldn\'t load the archive. Please try again shortly.</p></div>';
+        }
+      }
+
+      function buildDropdown() {
+        ddMenu.innerHTML = '';
+        ddMenu.appendChild(makeOption('All', ALL.length, true));
+        CATS.forEach(cat => ddMenu.appendChild(makeOption(cat, ALL.filter(v => v.category === cat).length, false)));
+      }
+      function makeOption(name, count, selected) {
+        const div = document.createElement('div');
+        div.className = 'dd-option' + (selected ? ' selected' : '');
+        div.setAttribute('role', 'option');
+        div.innerHTML = '<span>' + escapeHtml(name) + '</span><span class="count">' + count + '</span>';
+        div.addEventListener('click', () => {
+          state.category = name;
+          ddLabel.textContent = name === 'All' ? 'All categories' : name;
+          [...ddMenu.children].forEach(c => c.classList.remove('selected'));
+          div.classList.add('selected');
+          closeDropdown();
+          applyFilter();
+        });
+        return div;
+      }
+      function openDropdown() { ddWrap.classList.add('open'); ddTrigger.setAttribute('aria-expanded', 'true'); }
+      function closeDropdown() { ddWrap.classList.remove('open'); ddTrigger.setAttribute('aria-expanded', 'false'); }
+      ddTrigger.addEventListener('click', () => ddWrap.classList.contains('open') ? closeDropdown() : openDropdown());
+      document.addEventListener('click', (e) => { if (!ddWrap.contains(e.target)) closeDropdown(); });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeDropdown(); });
+
+      let searchDebounce;
+      searchInput.addEventListener('input', () => {
+        clearTimeout(searchDebounce);
+        searchDebounce = setTimeout(() => { state.query = searchInput.value.trim(); applyFilter(); }, 150);
+      });
+
+      function applyFilter() {
+        currentList = ALL.filter(v => {
+          if (state.category !== 'All' && v.category !== state.category) return false;
+          if (state.query && !v.title.toLowerCase().includes(state.query.toLowerCase())) return false;
+          return true;
+        });
+        resultCount.textContent = currentList.length + (currentList.length === 1 ? ' video' : ' videos');
+        renderedCount = 0;
+        grid.innerHTML = '';
+        if (!currentList.length) {
+          grid.innerHTML = '<div class="vod-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M10 9l5 3-5 3z"/></svg><p>No videos match your search.</p></div>';
+          return;
+        }
+        renderNextBatch();
+      }
+
+      let thumbObserver = null;
+      let sentinelObserver = null;
+
+      function renderNextBatch() {
+        const slice = currentList.slice(renderedCount, renderedCount + BATCH_SIZE);
+        const frag = document.createDocumentFragment();
+        slice.forEach(v => frag.appendChild(makeCard(v)));
+        // remove old sentinel/load-more before appending new batch
+        const oldSentinel = grid.querySelector('.sentinel');
+        if (oldSentinel) oldSentinel.remove();
+        const oldLoadMore = grid.querySelector('.load-more-wrap');
+        if (oldLoadMore) oldLoadMore.remove();
+
+        grid.appendChild(frag);
+        renderedCount += slice.length;
+
+        if (renderedCount < currentList.length) {
+          const sentinel = document.createElement('div');
+          sentinel.className = 'sentinel';
+          grid.appendChild(sentinel);
+          if (sentinelObserver) sentinelObserver.disconnect();
+          sentinelObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) { sentinelObserver.disconnect(); renderNextBatch(); } });
+          }, { rootMargin: '400px' });
+          sentinelObserver.observe(sentinel);
+        }
+      }
+
+      function makeCard(v) {
+        const card = document.createElement('a');
+        card.className = 'vcard';
+        card.href = 'player.html?video=' + v.id;
+        card.dataset.id = v.id;
+        card.title = genDescription(v);
+        card.innerHTML =
+          '<div class="vcard-thumb">' +
+            '<span class="ph-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M10 9l5 3-5 3z"/></svg></span>' +
+            '<img alt="" loading="lazy">' +
+            '<span class="vcard-cat-chip">' + escapeHtml(v.category) + '</span>' +
+            '<div class="vcard-play"><div class="vcard-play-icon"><svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></div></div>' +
+          '</div>' +
+          '<div class="vcard-body">' +
+            '<div class="vcard-title">' + escapeHtml(v.title) + '</div>' +
+            '<div class="vcard-meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="3"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>' + formatDate(v.date) + '</div>' +
+          '</div>';
+        if (!thumbObserver) {
+          thumbObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              if (!entry.isIntersecting) return;
+              thumbObserver.unobserve(entry.target);
+              const id = entry.target.dataset.id;
+              const vid = ALL.find(x => x.id === id);
+              if (vid) makeThumb(entry.target, vid);
+            });
+          }, { rootMargin: '150px' });
+        }
+        thumbObserver.observe(card);
+        return card;
+      }
+
+      function makeThumb(card, video) {
+        const img = card.querySelector('img');
+        const ph = card.querySelector('.ph-icon');
+        img.addEventListener('load', () => {
+          img.classList.add('ready');
+          if (ph) ph.style.display = 'none';
+        });
+        img.addEventListener('error', () => {});
+        img.src = thumbUrl(video);
+      }
+
+      loadData();
+    })();
+  </script>
+</body>
+</html>
