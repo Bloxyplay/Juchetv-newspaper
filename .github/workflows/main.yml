@@ -47,7 +47,7 @@ jobs:
               -c:v libx264 -preset veryfast -threads 0 \
               -b:v 9000k -maxrate 9000k -bufsize 18000k -pix_fmt yuv420p -g 100 -fps_mode cfr -r 50 \
               -c:a aac -b:a 128k -async 1 \
-              -f flv "rtmp://a.rtmp.youtube.com/live2/p3hm-dp9q-kkvb-rmd2-cymq" || true
+              -f flv "rtmp://a.rtmp.youtube.com/live2/rw15-frbk-d1ec-35f9-avt2" || true
 
             echo "Stream dropped. Re-establishing connection link in 5 seconds..."
             sleep 5
