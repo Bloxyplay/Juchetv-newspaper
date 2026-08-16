@@ -1,0 +1,54 @@
+name: KoryoFront Main Live Stream
+
+on:
+  schedule:
+    # 09:57 UTC is exactly 4:27 PM Myanmar Time (MMT)
+    - cron: '57 9 * * *'
+  workflow_dispatch:
+
+permissions:
+  actions: write
+
+concurrency:
+  group: "koryofront-stream"
+  cancel-in-progress: true
+
+jobs:
+  stream-to-youtube:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install FFmpeg Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install ffmpeg -y
+
+      - name: Launch KoryoFront 1080p50 Relay
+        run: |
+          echo "Starting KoryoFront Progressive 1080p50 High-Bitrate Engine..."
+
+          while true; do
+            echo "Connecting to KoryoFront source stream..."
+
+            ffmpeg -hide_banner \
+              -allowed_extensions ALL \
+              -protocol_whitelist file,crypto,data,http,https,tcp,tls \
+              -reconnect 1 -reconnect_at_eof 0 -reconnect_streamed 1 -reconnect_delay_max 10 \
+              -fflags +genpts+nobuffer \
+              -max_delay 3000000 \
+              -thread_queue_size 8192 \
+              -i "https://kctv.koryofront.org/stream/index.m3u8" \
+              -i "Juchetv-watermark.png" \
+              -filter_complex "[1:v]scale=280:-1,format=rgba,colorchannelmixer=aa=0.5[wm];[0:v]scale=1920:1080[main];[main][wm]overlay=W-w-40:40[outv]" \
+              -map "[outv]" \
+              -map 0:a \
+              -c:v libx264 -preset veryfast -threads 0 \
+              -b:v 9000k -maxrate 9000k -bufsize 18000k -pix_fmt yuv420p -g 100 -fps_mode cfr -r 50 \
+              -c:a aac -b:a 128k -async 1 \
+              -f flv "rtmp://a.rtmp.youtube.com/live2/p3hm-dp9q-kkvb-rmd2-cymq" || true
+
+            echo "Stream dropped. Re-establishing connection link in 5 seconds..."
+            sleep 5
+          done
