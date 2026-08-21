@@ -1,5 +1,8 @@
-// api/media.js
+import crypto from "crypto";
+
 const SOURCE_URL = "https://koryofront.org/api/kctv/media-list";
+
+const md5 = (str) => crypto.createHash("md5").update(str).digest("hex");
 
 export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -32,8 +35,8 @@ export default async function handler(req, res) {
       `https://koryofront.org/api/kctv/thumb?path=${encodeURIComponent(url)}&t=5`;
 
     const transformItems = (items, categorySlug, categoryName, thumbUrl) =>
-      (items || []).map((item, index) => ({
-        id: `${categorySlug}-${item.date}-${index}`,
+      (items || []).map((item) => ({
+        id: `kctv-${md5(item.url)}`,
         title: item.title,
         date: item.date,
         videoUrl: item.url,
