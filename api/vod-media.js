@@ -27,30 +27,29 @@ export default async function handler(req, res) {
 
     const raw = await upstream.json();
 
-    // Title mappings
-    const titleMap = {
-      [raw.newsTitle]: "News Report 【8PM】",
-      [raw.activitiesTitle]: raw.activitiesTitle || "Revolutionary Activities",
-      [raw.societyAndCultureTitle]: "Lifestyle & Culture",
-    };
+    const newsThumb = "https://resources-juchetv.vercel.app/News.png";
+    const koryoThumb = (url) =>
+      `https://koryofront.org/api/kctv/thumb?path=${encodeURIComponent(url)}&t=5`;
 
-    const mapTitle = (original) => titleMap[original] || original;
-
-    const transformItems = (items, categorySlug) =>
+    const transformItems = (items, categorySlug, categoryName, thumbUrl) =>
       (items || []).map((item, index) => ({
         id: `${categorySlug}-${item.date}-${index}`,
         title: item.title,
         date: item.date,
         videoUrl: item.url,
+        thumbnail: thumbUrl || koryoThumb(item.url),
         type: "video",
         source: "dropbox",
         category: categorySlug,
+        categoryName,
       }));
+
+    const newsName = "News Report 【8PM】";
+    const activitiesName = raw.activitiesTitle || "Revolutionary Activities";
+    const lifestyleName = "Lifestyle & Culture";
 
     const transformed = {
       meta: {
-        source: SOURCE_URL,
-        fetchedAt: new Date().toISOString(),
         totalItems:
           (raw.news?.length || 0) +
           (raw.activities?.length || 0) +
@@ -60,30 +59,29 @@ export default async function handler(req, res) {
         {
           id: "news",
           slug: "news",
-          name: mapTitle(raw.newsTitle),
-          items: transformItems(raw.news, "news"),
+          name: newsName,
+          items: transformItems(raw.news, "news", newsName, newsThumb),
         },
         {
           id: "activities",
           slug: "activities",
-          name: mapTitle(raw.activitiesTitle),
-          items: transformItems(raw.activities, "activities"),
+          name: activitiesName,
+          items: transformItems(raw.activities, "activities", activitiesName),
         },
         {
           id: "lifestyle-culture",
           slug: "lifestyle-culture",
-          name: mapTitle(raw.societyAndCultureTitle),
-          items: transformItems(raw.societyAndCulture, "lifestyle-culture"),
+          name: lifestyleName,
+          items: transformItems(raw.societyAndCulture, "lifestyle-culture", lifestyleName),
         },
       ],
       feed: [
-        ...transformItems(raw.news, "news"),
-        ...transformItems(raw.activities, "activities"),
-        ...transformItems(raw.societyAndCulture, "lifestyle-culture"),
+        ...transformItems(raw.news, "news", newsName, newsThumb),
+        ...transformItems(raw.activities, "activities", activitiesName),
+        ...transformItems(raw.societyAndCulture, "lifestyle-culture", lifestyleName),
       ].sort((a, b) => new Date(b.date) - new Date(a.date)),
     };
 
-    // Query filters
     const { category, limit, dateFrom, dateTo } = req.query;
 
     if (category) {
