@@ -1,8 +1,19 @@
-import crypto from "crypto";
-
+// api/media.js
 const SOURCE_URL = "https://koryofront.org/api/kctv/media-list";
 
-const md5 = (str) => crypto.createHash("md5").update(str).digest("hex");
+const slugify = (text) =>
+  text
+    .toString()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/[^\w-]+/g, "")
+    .replace(/--+/g, "-")
+    .slice(0, 20);
+
+const genId = () => crypto.randomUUID().replace(/[^a-zA-Z]/g, "").slice(0, 5).toLowerCase();
 
 export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -36,7 +47,7 @@ export default async function handler(req, res) {
 
     const transformItems = (items, categorySlug, categoryName, thumbUrl) =>
       (items || []).map((item) => ({
-        id: `kctv-${md5(item.url)}`,
+        id: `kctv-${slugify(item.title)}-${genId()}`,
         title: item.title,
         date: item.date,
         videoUrl: item.url,
