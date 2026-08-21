@@ -13,7 +13,18 @@ const slugify = (text) =>
     .replace(/--+/g, "-")
     .slice(0, 20);
 
-const genId = () => crypto.randomUUID().replace(/[^a-zA-Z]/g, "").slice(0, 5).toLowerCase();
+const hash5 = (str) => {
+  let h = 0;
+  for (let i = 0; i < str.length; i++) {
+    h = ((h << 5) - h + str.charCodeAt(i)) & 0xfffffff;
+  }
+  const chars = "abcdefghijklmnopqrstuvwxyz";
+  let out = "";
+  for (let i = 0; i < 5; i++) {
+    out += chars[Math.abs(h + i * 31) % 26];
+  }
+  return out;
+};
 
 export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -47,7 +58,7 @@ export default async function handler(req, res) {
 
     const transformItems = (items, categorySlug, categoryName, thumbUrl) =>
       (items || []).map((item) => ({
-        id: `kctv-${slugify(item.title)}-${genId()}`,
+        id: `kctv-${slugify(item.title)}-${hash5(item.url)}`,
         title: item.title,
         date: item.date,
         videoUrl: item.url,
