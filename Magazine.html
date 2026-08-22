@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#141218">
+  <title>Juche TV - Publications</title>
+  <meta name="description" content="A formal archive of DPRK periodicals, magazines and books — Pyongyang Times, DPR Korea, and more. Browse by category and download as PDF.">
+
+  <!-- Open Graph / Discord / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="JucheTV">
+  <meta property="og:title" content="Juche TV - Publications">
+  <meta property="og:description" content="A formal archive of DPRK periodicals, magazines and books — Pyongyang Times, DPR Korea, and more. Browse by category and download as PDF.">
+  <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/3/3c/Emblem_of_North_Korea.svg?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=original">
+  <meta property="og:theme-color" content="#FF5449">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Juche TV - Publications">
+  <meta name="twitter:description" content="A formal archive of DPRK periodicals, magazines and books — Pyongyang Times, DPR Korea, and more. Browse by category and download as PDF.">
+  <meta name="twitter:image" content="https://upload.wikimedia.org/wikipedia/en/a/ad/Korean_Central_Television_2005.svg">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700;900&family=Roboto+Condensed:wght@600;700&display=swap');
+
+    /* ═══════════════════════════════════════════
+       MATERIAL 3 — DARK TONAL SYSTEM (shared with index)
+       ═══════════════════════════════════════════ */
+    :root {
+      --md-bg:                 #101014;
+      --surface:                #141218;
+      --surface-container-low:  #1A181E;
+      --surface-container:      #1D1B20;
+      --surface-container-high: #262429;
+      --surface-container-highest: #2F2D33;
+      --outline:                #48454E;
+      --outline-variant:        #322F37;
+
+      --on-surface:          #E6E1E5;
+      --on-surface-variant:  #A8A3AC;
+
+      --primary:            #FF5449;
+      --on-primary:         #690003;
+      --primary-container:  #93000A;
+      --on-primary-container: #FFDAD5;
+
+      --secondary:           #A8C8FF;
+      --secondary-container: #1E3A5C;
+      --on-secondary-container: #D6E3FF;
+
+      --tertiary:            #EFC44C;
+      --tertiary-container:  #4E4200;
+      --on-tertiary-container: #FBE292;
+
+      --success:            #7DDA8F;
+      --success-container:  #0F3F1C;
+      --error:              #FF897A;
+
+      --shape-xs: 8px;
+      --shape-sm: 12px;
+      --shape-md: 16px;
+      --shape-lg: 20px;
+      --shape-xl: 28px;
+      --shape-full: 999px;
+
+      --elev-1: 0 1px 2px rgba(0,0,0,0.45), 0 1px 3px 1px rgba(0,0,0,0.25);
+      --elev-2: 0 1px 2px rgba(0,0,0,0.5), 0 3px 8px 1px rgba(0,0,0,0.3);
+    }
+
+    *, *::before, *::after {
+      margin: 0; padding: 0; box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Roboto', system-ui, sans-serif;
+      background: var(--md-bg);
+      color: var(--on-surface);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    .eyebrow-font { font-family: 'Roboto Condensed', 'Roboto', sans-serif; }
+
+    /* ─── TOP APP BAR ─── */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--surface);
+      border-bottom: 1px solid var(--outline-variant);
+    }
+    .nav-inner {
+      max-width: 1120px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px; height: 64px;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 20px; font-weight: 700;
+      color: var(--on-surface); text-decoration: none;
+      padding: 8px; border-radius: var(--shape-lg);
+    }
+    .logo-icon {
+      width: 36px; height: 36px;
+      background: var(--primary-container);
+      border-radius: var(--shape-sm);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .logo-icon svg { color: var(--on-primary-container); }
+    .nav-links { display: flex; align-items: center; gap: 4px; margin-right: 8px; }
+    .nav-link {
+      display: flex; align-items: center; gap: 8px;
+      height: 40px; padding: 0 16px;
+      border-radius: var(--shape-full);
+      color: var(--on-surface-variant);
+      text-decoration: none;
+      font-size: 13.5px; font-weight: 600;
+      transition: background 0.15s ease, color 0.15s ease;
+      position: relative;
+    }
+    .nav-link svg { width: 18px; height: 18px; }
+    .nav-link:hover { background: var(--surface-container-high); color: var(--on-surface); }
+    .nav-link.active { background: var(--primary-container); color: var(--on-primary-container); }
+    .nav-link .link-soon {
+      font-size: 8px; font-weight: 800; letter-spacing: 0.4px;
+      color: #211B00; background: var(--tertiary);
+      padding: 2px 5px; border-radius: var(--shape-xs);
+    }
+
+    /* ─── MAIN ─── */
+    .main { max-width: 1120px; margin: 0 auto; padding: 32px 24px 64px; }
+
+    /* ─── HERO ─── */
+    .hero { margin-bottom: 24px; }
+    .status-chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--tertiary-container);
+      color: var(--on-tertiary-container);
+      font-size: 12px; font-weight: 700; letter-spacing: 0.3px;
+      padding: 6px 12px 6px 10px;
+      border-radius: var(--shape-full);
+      margin-bottom: 12px;
+    }
+    .status-chip svg { width: 13px; height: 13px; }
+    .hero h1 {
+      font-size: 40px; font-weight: 900; letter-spacing: -0.5px;
+      line-height: 1.1; margin-bottom: 10px;
+    }
+    .hero p {
+      font-size: 15px; color: var(--on-surface-variant);
+      line-height: 1.6; max-width: 62%;
+    }
+    .hero-stats {
+      display: flex; gap: 28px; margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .hero-stat { display: flex; flex-direction: column; gap: 2px; }
+    .hero-stat .num { font-size: 22px; font-weight: 800; color: var(--on-surface); font-family: 'Roboto Condensed'; }
+    .hero-stat .lbl { font-size: 11.5px; color: var(--on-surface-variant); text-transform: uppercase; letter-spacing: 0.4px; font-weight: 600; }
+
+    /* ─── FILTER BAR ─── */
+    .filter-bar {
+      display: flex; align-items: center; gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+    .filter-chip {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: var(--surface-container);
+      border: 1px solid var(--outline-variant);
+      color: var(--on-surface-variant);
+      font-size: 13px; font-weight: 600;
+      padding: 9px 16px;
+      border-radius: var(--shape-full);
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+      user-select: none;
+    }
+    .filter-chip .count {
+      font-size: 11px; font-weight: 700;
+      background: var(--surface-container-highest);
+      color: var(--on-surface-variant);
+      padding: 1px 7px; border-radius: var(--shape-full);
+    }
+    .filter-chip:hover { background: var(--surface-container-high); color: var(--on-surface); }
+    .filter-chip.active {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      border-color: transparent;
+    }
+    .filter-chip.active .count { background: rgba(0,0,0,0.2); color: var(--on-primary-container); }
+
+    .search-wrap {
+      margin-left: auto;
+      position: relative;
+      min-width: 240px;
+    }
+    .search-wrap svg {
+      position: absolute; left: 13px; top: 50%; transform: translateY(-50%);
+      width: 16px; height: 16px; color: var(--on-surface-variant); pointer-events: none;
+    }
+    .search-input {
+      width: 100%;
+      background: var(--surface-container);
+      border: 1px solid var(--outline-variant);
+      color: var(--on-surface);
+      font-family: inherit; font-size: 13.5px;
+      padding: 10px 14px 10px 36px;
+      border-radius: var(--shape-full);
+      outline: none;
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+    .search-input::placeholder { color: var(--on-surface-variant); }
+    .search-input:focus { border-color: var(--primary); background: var(--surface-container-high); }
+
+    .section-label {
+      font-size: 13px; font-weight: 700; color: var(--primary);
+      margin: 28px 0 14px; padding-left: 4px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--outline-variant); }
+
+    /* ─── PUBLICATION GRID ─── */
+    .pub-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 18px;
+    }
+
+    .pub-card {
+      background: var(--surface-container);
+      border-radius: var(--shape-lg);
+      overflow: hidden;
+      box-shadow: var(--elev-1);
+      display: flex; flex-direction: column;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeUp 0.4s cubic-bezier(0.2,0,0,1) forwards;
+    }
+    @keyframes fadeUp { to { opacity:1; transform:translateY(0); } }
+    .pub-card:hover { transform: translateY(-3px); box-shadow: var(--elev-2); }
+
+    .pub-cover-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      background: var(--surface-container-highest);
+      overflow: hidden;
+    }
+    .pub-cover-wrap img {
+      width: 100%; height: 100%; object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+    .pub-card:hover .pub-cover-wrap img { transform: scale(1.04); }
+    .pub-cover-fallback {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 8px;
+      color: var(--on-surface-variant);
+      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+      text-align: center; padding: 12px;
+    }
+    .pub-cover-fallback svg { width: 30px; height: 30px; opacity: 0.5; }
+    .pub-cover-wrap img.hidden { display: none; }
+
+    .pub-type-badge {
+      position: absolute; top: 10px; left: 10px;
+      font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;
+      padding: 4px 9px; border-radius: var(--shape-xs);
+      backdrop-filter: blur(6px);
+    }
+    .pub-type-magazine { background: rgba(255,84,73,0.85); color: #fff; }
+    .pub-type-newspaper { background: rgba(168,200,255,0.9); color: #10203a; }
+    .pub-type-book { background: rgba(239,196,76,0.92); color: #211B00; }
+
+    .pub-year-badge {
+      position: absolute; top: 10px; right: 10px;
+      font-size: 10px; font-weight: 700;
+      background: rgba(0,0,0,0.55);
+      color: #fff;
+      padding: 4px 8px; border-radius: var(--shape-xs);
+      backdrop-filter: blur(6px);
+    }
+
+    .pub-body { padding: 12px 13px 13px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+    .pub-title {
+      font-size: 13.5px; font-weight: 700; line-height: 1.3;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+      min-height: 2.6em;
+    }
+    .pub-meta { font-size: 11px; color: var(--on-surface-variant); display: flex; align-items: center; gap: 5px; }
+    .pub-meta .sep { opacity: 0.5; }
+
+    .pub-download {
+      margin-top: auto;
+      display: flex; align-items: center; justify-content: center; gap: 7px;
+      background: var(--surface-container-highest);
+      color: var(--on-surface);
+      font-size: 12.5px; font-weight: 700;
+      padding: 9px 10px;
+      border-radius: var(--shape-md);
+      text-decoration: none;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    .pub-download svg { width: 15px; height: 15px; }
+    .pub-download:hover { background: var(--primary-container); color: var(--on-primary-container); }
+
+    /* ─── LOADING / EMPTY / ERROR STATES ─── */
+    .state-panel {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; gap: 12px;
+      padding: 64px 20px;
+      color: var(--on-surface-variant);
+    }
+    .state-panel svg { width: 34px; height: 34px; opacity: 0.5; }
+    .state-panel h3 { color: var(--on-surface); font-size: 16px; font-weight: 700; }
+    .state-panel p { font-size: 13px; max-width: 340px; line-height: 1.5; }
+    .spinner {
+      width: 30px; height: 30px;
+      border: 3px solid var(--surface-container-highest);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .skeleton-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 18px;
+    }
+    .skeleton-card {
+      background: var(--surface-container);
+      border-radius: var(--shape-lg);
+      overflow: hidden;
+    }
+    .skeleton-cover { aspect-ratio: 3/4; background: linear-gradient(100deg, var(--surface-container-high) 30%, var(--surface-container-highest) 50%, var(--surface-container-high) 70%); background-size: 200% 100%; animation: shimmer 1.4s ease-in-out infinite; }
+    .skeleton-line { height: 10px; margin: 12px 13px; border-radius: 4px; background: var(--surface-container-high); }
+    @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+    /* ─── FOOTER ─── */
+    .footer {
+      max-width: 1120px; margin: 0 auto; padding: 40px 24px 8px;
+      text-align: center; font-size: 11px; color: var(--on-surface-variant);
+      opacity: 0.6; line-height: 1.8;
+    }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--surface-container-highest); border-radius: 4px; }
+
+    @media (max-width: 860px) {
+      .nav-inner { padding: 0 14px; }
+      .nav-links .nav-link span { display: none; }
+      .nav-link { padding: 0 10px; }
+      .main { padding: 20px 14px 56px; }
+      .hero h1 { font-size: 30px; }
+      .hero p { max-width: 100%; font-size: 13.5px; }
+      .search-wrap { min-width: 100%; margin-left: 0; order: 99; }
+      .pub-grid, .skeleton-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <div class="logo-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        Juche TV 
+      </a>
+      <div class="nav-links">
+        <a href="/" class="nav-link">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+          <span>Home</span>
+        </a>
+        <a href="/schedules" class="nav-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="3"/>
+            <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+          <span>Schedule</span>
+        </a>
+        <a href="/Magazine" class="nav-link active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+          </svg>
+          <span>Magazines</span>
+        </a>
+        <a href="/VOD" class="nav-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 8.5l1.2-3.6a1.5 1.5 0 0 1 1.9-.95l13.4 4.55"/>
+            <path d="M3 8.5V19a1.5 1.5 0 0 0 1.5 1.5h15A1.5 1.5 0 0 0 21 19V9.5A1.5 1.5 0 0 0 19.5 8H4.5A1.5 1.5 0 0 0 3 8.5z"/>
+            <path d="M7 5l3 3.5"/><path d="M12 3.8l3 3.5"/><path d="M3 8.5h18"/>
+          </svg>
+          <span>VOD</span>
+          <span class="link-soon">Soon</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main -->
+  <main class="main">
+
+    <!-- Hero -->
+    <div class="hero">
+      <div class="status-chip">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+        Publications Archive
+      </div>
+      <h1>DPRK Publications</h1>
+      <p>A formal, growing archive of North Korean periodicals, magazines and books &mdash; official state media, digitised and made available for reference and download.</p>
+      <div class="hero-stats" id="heroStats"></div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filter-bar" id="filterBar">
+      <button class="filter-chip active" data-filter="all">All <span class="count" id="countAll">&mdash;</span></button>
+      <button class="filter-chip" data-filter="magazine">Magazines <span class="count" id="countMagazine">&mdash;</span></button>
+      <button class="filter-chip" data-filter="newspaper">Newspapers <span class="count" id="countNewspaper">&mdash;</span></button>
+      <button class="filter-chip" data-filter="book">Books <span class="count" id="countBook">&mdash;</span></button>
+      <div class="search-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" class="search-input" id="searchInput" placeholder="Search publications&hellip;">
+      </div>
+    </div>
+
+    <!-- Loading skeleton -->
+    <div class="skeleton-grid" id="skeletonGrid">
+      <!-- populated by JS -->
+    </div>
+
+    <!-- Publication grid -->
+    <div class="pub-grid" id="pubGrid" style="display:none;"></div>
+
+    <!-- Empty / error state -->
+    <div class="state-panel" id="statePanel" style="display:none;"></div>
+
+    <footer class="footer">
+      &copy; Juche TV&mdash; Not affiliated with any broadcasting entity.<br>
+      
+    </footer>
+  </main>
+
+  <script>
+    (function () {
+      const API_URL = 'https://resources-juchetv.vercel.app/api/publications';
+      const DOWNLOAD_BASE = 'https://koryofront.org/api/publications';
+
+      const pubGrid = document.getElementById('pubGrid');
+      const skeletonGrid = document.getElementById('skeletonGrid');
+      const statePanel = document.getElementById('statePanel');
+      const heroStats = document.getElementById('heroStats');
+      const filterBar = document.getElementById('filterBar');
+      const searchInput = document.getElementById('searchInput');
+
+      let allItems = [];
+      let activeFilter = 'all';
+      let searchTerm = '';
+
+      // Render skeleton placeholders while fetching
+      for (let i = 0; i < 8; i++) {
+        const sk = document.createElement('div');
+        sk.className = 'skeleton-card';
+        sk.innerHTML = '<div class="skeleton-cover"></div><div class="skeleton-line" style="width:85%"></div><div class="skeleton-line" style="width:55%"></div>';
+        skeletonGrid.appendChild(sk);
+      }
+
+      function showState(type) {
+        skeletonGrid.style.display = 'none';
+        pubGrid.style.display = 'none';
+        statePanel.style.display = 'flex';
+
+        if (type === 'error') {
+          statePanel.innerHTML =
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="13"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>' +
+            '<h3>Unable to load the archive</h3>' +
+            '<p>The publications service could not be reached. Please check your connection and try again shortly.</p>';
+        } else if (type === 'empty') {
+          statePanel.innerHTML =
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>' +
+            '<h3>No publications found</h3>' +
+            '<p>Try a different category or search term.</p>';
+        }
+      }
+
+      function formatSize(bytes) {
+        if (!bytes || isNaN(bytes)) return '';
+        const mb = bytes / (1024 * 1024);
+        return mb >= 1 ? mb.toFixed(1) + ' MB' : Math.round(bytes / 1024) + ' KB';
+      }
+
+      function normaliseYear(y) {
+        if (!y) return '';
+        const m = String(y).match(/^\d{4}/);
+        return m ? m[0] : String(y);
+      }
+
+      function typeLabel(t) {
+        if (t === 'magazine') return 'Magazine';
+        if (t === 'newspaper') return 'Newspaper';
+        if (t === 'book') return 'Book';
+        return 'Publication';
+      }
+
+      function coverFallbackSvg() {
+        return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><span>No cover</span>';
+      }
+
+      function cardHtml(item, index) {
+        const delay = Math.min(index * 0.03, 0.5).toFixed(2);
+        const year = normaliseYear(item.year);
+        const size = formatSize(item.size);
+        return (
+          '<div class="pub-card" style="animation-delay:' + delay + 's">' +
+            '<div class="pub-cover-wrap">' +
+              (item.cover ? '<img data-src="' + item.cover + '" alt="' + escapeHtml(item.title) + '" loading="lazy" decoding="async" onerror="this.classList.add(\'hidden\');this.nextElementSibling.style.display=\'flex\'">' : '') +
+              '<div class="pub-cover-fallback" style="' + (item.cover ? 'display:none;' : '') + '">' + coverFallbackSvg() + '</div>' +
+              '<span class="pub-type-badge pub-type-' + item.type + '">' + typeLabel(item.type) + '</span>' +
+              (year ? '<span class="pub-year-badge">' + year + '</span>' : '') +
+            '</div>' +
+            '<div class="pub-body">' +
+              '<div class="pub-title">' + escapeHtml(item.title) + '</div>' +
+              '<div class="pub-meta">' +
+                (size ? '<span>' + size + '</span><span class="sep">&middot;</span>' : '') +
+                '<span>PDF</span>' +
+              '</div>' +
+              '<a class="pub-download" href="' + item.downloadUrl + '" target="_blank" rel="noopener">' +
+                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 20h16"/></svg>' +
+                'Download' +
+              '</a>' +
+            '</div>' +
+          '</div>'
+        );
+      }
+
+      function escapeHtml(str) {
+        const div = document.createElement('div');
+        div.textContent = str == null ? '' : String(str);
+        return div.innerHTML;
+      }
+
+      function updateCounts() {
+        const counts = { all: allItems.length, magazine: 0, newspaper: 0, book: 0 };
+        allItems.forEach(function (i) {
+          if (counts[i.type] !== undefined) counts[i.type]++;
+        });
+        document.getElementById('countAll').textContent = counts.all;
+        document.getElementById('countMagazine').textContent = counts.magazine;
+        document.getElementById('countNewspaper').textContent = counts.newspaper;
+        document.getElementById('countBook').textContent = counts.book;
+      }
+
+      function updateHeroStats() {
+        const types = {};
+        allItems.forEach(function (i) { types[i.type] = (types[i.type] || 0) + 1; });
+        const latestYear = allItems.reduce(function (acc, i) {
+          const y = parseInt(normaliseYear(i.year), 10);
+          return (!isNaN(y) && y > acc) ? y : acc;
+        }, 0);
+        heroStats.innerHTML =
+          '<div class="hero-stat"><span class="num">' + allItems.length + '</span><span class="lbl">Total items</span></div>' +
+          '<div class="hero-stat"><span class="num">' + (types.magazine || 0) + '</span><span class="lbl">Magazines</span></div>' +
+          '<div class="hero-stat"><span class="num">' + (types.newspaper || 0) + '</span><span class="lbl">Newspapers</span></div>' +
+          '<div class="hero-stat"><span class="num">' + (types.book || 0) + '</span><span class="lbl">Books</span></div>' +
+          (latestYear ? '<div class="hero-stat"><span class="num">' + latestYear + '</span><span class="lbl">Most recent</span></div>' : '');
+      }
+
+      function render() {
+        let items = allItems;
+        if (activeFilter !== 'all') {
+          items = items.filter(function (i) { return i.type === activeFilter; });
+        }
+        if (searchTerm) {
+          const q = searchTerm.toLowerCase();
+          items = items.filter(function (i) { return i.title.toLowerCase().indexOf(q) !== -1; });
+        }
+
+        skeletonGrid.style.display = 'none';
+
+        if (!items.length) {
+          showState('empty');
+          return;
+        }
+
+        statePanel.style.display = 'none';
+        pubGrid.style.display = 'grid';
+        pubGrid.innerHTML = items.map(cardHtml).join('');
+        observeCovers();
+      }
+
+      let coverObserver;
+      function observeCovers() {
+        const imgs = pubGrid.querySelectorAll('img[data-src]');
+        if (!('IntersectionObserver' in window)) {
+          imgs.forEach(function (img) { img.src = img.getAttribute('data-src'); img.removeAttribute('data-src'); });
+          return;
+        }
+        if (coverObserver) coverObserver.disconnect();
+        coverObserver = new IntersectionObserver(function (entries, obs) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              const img = entry.target;
+              img.src = img.getAttribute('data-src');
+              img.removeAttribute('data-src');
+              obs.unobserve(img);
+            }
+          });
+        }, { root: null, rootMargin: '200px 0px', threshold: 0.01 });
+        imgs.forEach(function (img) { coverObserver.observe(img); });
+      }
+
+      filterBar.addEventListener('click', function (e) {
+        const btn = e.target.closest('.filter-chip');
+        if (!btn) return;
+        filterBar.querySelectorAll('.filter-chip').forEach(function (c) { c.classList.remove('active'); });
+        btn.classList.add('active');
+        activeFilter = btn.getAttribute('data-filter');
+        render();
+      });
+
+      let searchTimer;
+      searchInput.addEventListener('input', function () {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(function () {
+          searchTerm = searchInput.value.trim();
+          render();
+        }, 150);
+      });
+
+      async function loadPublications() {
+        try {
+          const res = await fetch(API_URL, { cache: 'no-store' });
+          if (!res.ok) throw new Error('Bad response: ' + res.status);
+          const data = await res.json();
+          const rawItems = data['အချက်အလက်များ'] || [];
+
+          allItems = rawItems.map(function (raw) {
+            const id = raw['အမှတ်'];
+            return {
+              id: id,
+              title: raw['ခေါင်းစဉ်'] || 'Untitled Publication',
+              type: (raw['အမျိုးအစား'] || 'book').toLowerCase(),
+              year: raw['ထုတ်ဝေသည့်နှစ်'],
+              size: raw['ဖိုင်အရွယ်အစား'],
+              cover: DOWNLOAD_BASE + '/' + id + '/cover',
+              downloadUrl: DOWNLOAD_BASE + '/' + id + '/view'
+            };
+          });
+
+          if (!allItems.length) {
+            showState('empty');
+            return;
+          }
+
+          updateCounts();
+          updateHeroStats();
+          render();
+        } catch (err) {
+          showState('error');
+        }
+      }
+
+      loadPublications();
+    })();
+  </script>
+</body>
+</html>

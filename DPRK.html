@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0d1015">
+  <title>Explore About DPRK — Juche TV</title>
+  <meta name="description" content="Tourism, country symbols, education, national defence, the political system, the socio-economic system and the Constitution of the Democratic People's Republic of Korea.">
+
+  <!-- Open Graph / Discord / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Juche TV">
+  <meta property="og:title" content="Explore About DPRK — Juche TV">
+  <meta property="og:description" content="Tourism, country symbols, education, national defence, the political system, the socio-economic system and the Constitution of the Democratic People's Republic of Korea.">
+  <meta property="og:image" content="https://koryofront.org/static-img/political-system.jpg">
+  <meta property="og:theme-color" content="#C8102E">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Explore About DPRK — Juche TV">
+  <meta name="twitter:description" content="Tourism, country symbols, education, national defence, the political system, the socio-economic system and the Constitution of the DPRK.">
+  <meta name="twitter:image" content="https://koryofront.org/static-img/political-system.jpg">
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500&display=swap');
+
+    /* ══════════════════════════════════════════════
+       JUCHE TV — PROFESSIONAL MEDIA / BROADCAST THEME
+       (shared design language with the main site)
+       ══════════════════════════════════════════════ */
+    :root {
+      --paper:      #faf9f6;
+      --card:       #ffffff;
+      --ink:        #16181d;
+      --ink-2:      #2e323b;
+      --muted:      #5d6370;
+      --faint:      #8b91a1;
+      --line:       #e7e3da;
+      --line-dark:  #d9d4c8;
+
+      --red:        #c8102e;
+      --red-dark:   #9d0c25;
+      --red-tint:   #fbeef0;
+      --blue:       #154c79;
+      --blue-tint:  #eaf1f8;
+      --gold:       #b8860b;
+      --gold-tint:  #fbf3e0;
+      --green:      #1e7a3c;
+      --green-tint: #e9f6ee;
+
+      --night:      #0d1015;
+      --night-2:    #161a21;
+      --night-line: #262c36;
+      --night-text: #aab1bf;
+
+      --radius:     14px;
+      --radius-sm:  9px;
+      --shadow-sm:  0 1px 2px rgba(16,18,24,.06), 0 2px 8px rgba(16,18,24,.05);
+      --shadow-md:  0 10px 30px -8px rgba(16,18,24,.18);
+      --wrap:       1180px;
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+    html { scroll-behavior:smooth; }
+
+    body {
+      font-family:'Archivo', system-ui, -apple-system, sans-serif;
+      background:var(--paper);
+      color:var(--ink);
+      min-height:100vh;
+      -webkit-font-smoothing:antialiased;
+      overflow-x:hidden;
+    }
+
+    .wrap { max-width:var(--wrap); margin:0 auto; padding:0 24px; }
+    a { color:inherit; }
+
+    /* ─── TOP UTILITY BAR ─── */
+    .topbar { background:var(--night); color:var(--night-text); font-size:11.5px; font-weight:600; letter-spacing:.8px; text-transform:uppercase; }
+    .topbar-inner { display:flex; align-items:center; justify-content:space-between; height:36px; gap:16px; }
+    .topbar-left { display:flex; align-items:center; gap:10px; min-width:0; }
+    .live-dot { width:7px; height:7px; border-radius:50%; background:var(--red); box-shadow:0 0 0 0 rgba(200,16,46,.6); animation:beacon 2s ease-out infinite; flex-shrink:0; }
+    @keyframes beacon { 0% { box-shadow:0 0 0 0 rgba(200,16,46,.55); } 70% { box-shadow:0 0 0 7px rgba(200,16,46,0); } 100% { box-shadow:0 0 0 0 rgba(200,16,46,0); } }
+    .topbar-note { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .topbar-right { display:flex; align-items:center; gap:14px; flex-shrink:0; }
+    .topbar-clock { color:#fff; font-variant-numeric:tabular-nums; display:flex; align-items:center; gap:7px; }
+    .topbar-clock svg { width:13px; height:13px; color:var(--night-text); }
+
+    /* ─── MASTHEAD ─── */
+    .masthead { background:var(--paper); border-bottom:1px solid var(--line); }
+    .masthead-inner { display:flex; align-items:center; justify-content:space-between; gap:24px; padding:22px 0 20px; }
+    .brand { display:flex; align-items:center; gap:14px; text-decoration:none; }
+    .brand-mark { width:46px; height:46px; border-radius:12px; background:linear-gradient(150deg, var(--red), var(--red-dark)); display:flex; align-items:center; justify-content:center; box-shadow:0 4px 14px -4px rgba(200,16,46,.5); flex-shrink:0; }
+    .brand-mark svg { width:20px; height:20px; color:#fff; margin-left:2px; }
+    .brand-text { display:flex; flex-direction:column; }
+    .brand-word { font-size:30px; font-weight:900; letter-spacing:-.5px; line-height:1; color:var(--ink); }
+    .brand-word em { font-style:normal; color:var(--red); }
+    .brand-tag { font-size:11px; font-weight:600; letter-spacing:1.4px; text-transform:uppercase; color:var(--muted); margin-top:6px; }
+    .masthead-meta { text-align:right; font-size:12px; color:var(--muted); line-height:1.7; flex-shrink:0; }
+    .masthead-meta b { color:var(--ink-2); font-weight:700; }
+    .masthead-meta .mm-flag { display:inline-block; padding:2px 9px; border:1px solid var(--line-dark); border-radius:999px; font-size:10.5px; font-weight:700; letter-spacing:.6px; text-transform:uppercase; color:var(--ink-2); background:var(--card); }
+
+    /* ─── PRIMARY NAV ─── */
+    .site-nav { background:var(--card); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:200; box-shadow:0 1px 0 rgba(16,18,24,.02); }
+    .nav-scroll { display:flex; align-items:center; gap:2px; overflow-x:auto; scrollbar-width:none; }
+    .nav-scroll::-webkit-scrollbar { display:none; }
+    .nav-link { display:flex; align-items:center; gap:8px; padding:14px 16px 12px; font-size:12.5px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--muted); text-decoration:none; border-bottom:3px solid transparent; white-space:nowrap; transition:color .15s ease, border-color .15s ease; }
+    .nav-link svg { width:15px; height:15px; }
+    .nav-link:hover { color:var(--ink); }
+    .nav-link.active { color:var(--red); border-bottom-color:var(--red); }
+    .nav-spacer { flex:1; }
+    .nav-api { display:flex; align-items:center; gap:7px; font-size:11px; font-weight:700; letter-spacing:.8px; text-transform:uppercase; color:var(--blue); background:var(--blue-tint); border:1px solid #d4e2f0; padding:7px 12px; border-radius:999px; text-decoration:none; margin:8px 0; white-space:nowrap; }
+    .nav-api svg { width:13px; height:13px; }
+    .nav-api:hover { background:#dfeaf6; }
+
+    /* ─── MAIN ─── */
+    .main { padding:28px 0 56px; }
+
+    /* ─── EXPLORE HEADER ─── */
+    .explore-head {
+      background:var(--night);
+      border-radius:var(--radius);
+      padding:36px 32px;
+      margin-bottom:30px;
+      position:relative;
+      overflow:hidden;
+      box-shadow:var(--shadow-md);
+    }
+    .explore-head::before {
+      content:'';
+      position:absolute; inset:0;
+      background:radial-gradient(ellipse at 85% 15%, rgba(200,16,46,.28), transparent 55%);
+      pointer-events:none;
+    }
+    .explore-kicker { position:relative; font-size:10.5px; font-weight:800; letter-spacing:1.6px; text-transform:uppercase; color:var(--red); margin-bottom:10px; display:flex; align-items:center; gap:8px; }
+    .explore-kicker::before { content:''; width:22px; height:2px; background:var(--red); }
+    .explore-head h1 { position:relative; font-size:30px; font-weight:900; letter-spacing:-.5px; color:#fff; margin-bottom:10px; }
+    .explore-head p { position:relative; font-size:14px; line-height:1.7; color:var(--night-text); max-width:640px; }
+
+    /* ─── SECTION HEADERS ─── */
+    .section-head { display:flex; align-items:baseline; gap:14px; margin:34px 0 16px; }
+    .section-head:first-child { margin-top:0; }
+    .section-head h2 { font-size:19px; font-weight:800; letter-spacing:-.2px; text-transform:uppercase; }
+    .section-head h2 span { color:var(--red); }
+    .section-head .rule { flex:1; height:1px; background:var(--line-dark); }
+
+    /* ─── ARTICLE CARD GRID ─── */
+    .article-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:20px; }
+    .article-card {
+      display:flex; flex-direction:column;
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      overflow:hidden;
+      text-decoration:none;
+      box-shadow:var(--shadow-sm);
+      transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+    }
+    .article-card:hover { transform:translateY(-3px); box-shadow:var(--shadow-md); border-color:var(--line-dark); }
+    .article-media { position:relative; aspect-ratio:16/9; background:#05070a; overflow:hidden; }
+    .article-media img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .3s ease; }
+    .article-card:hover .article-media img { transform:scale(1.04); }
+    .article-media::after { content:''; position:absolute; inset:0; background:linear-gradient(to top, rgba(5,7,10,.55), transparent 55%); pointer-events:none; }
+    .article-tag {
+      position:absolute; top:12px; left:12px; z-index:2;
+      font-size:9.5px; font-weight:800; letter-spacing:1px; text-transform:uppercase;
+      background:var(--red); color:#fff; padding:5px 10px; border-radius:5px;
+      box-shadow:0 2px 8px rgba(0,0,0,.35);
+    }
+    .article-body { padding:18px 20px 20px; display:flex; flex-direction:column; flex:1; }
+    .article-card h3 { font-size:16.5px; font-weight:800; letter-spacing:-.2px; margin-bottom:8px; line-height:1.25; }
+    .article-card p { font-size:13px; color:var(--muted); line-height:1.6; flex:1; }
+    .article-foot { display:flex; align-items:center; justify-content:space-between; margin-top:16px; padding-top:14px; border-top:1px solid var(--line); }
+    .tag { font-size:10px; font-weight:700; letter-spacing:.8px; text-transform:uppercase; color:var(--muted); background:var(--paper); border:1px solid var(--line); padding:4px 10px; border-radius:999px; }
+    .article-cta { display:inline-flex; align-items:center; gap:6px; font-size:11.5px; font-weight:800; letter-spacing:.8px; text-transform:uppercase; color:var(--red); }
+    .article-cta svg { width:14px; height:14px; transition:transform .15s ease; }
+    .article-card:hover .article-cta svg { transform:translateX(3px); }
+
+    /* ─── FEATURED CONSTITUTION STRIP ─── */
+    .vod-strip {
+      display:flex; align-items:center; gap:22px;
+      background:radial-gradient(ellipse at 85% 20%, rgba(200,16,46,.22), transparent 55%), var(--night);
+      border-radius:var(--radius);
+      padding:26px 28px;
+      text-decoration:none;
+      box-shadow:var(--shadow-md);
+      transition:transform .15s ease, box-shadow .2s ease;
+      margin-top:34px;
+    }
+    .vod-strip:hover { transform:translateY(-2px); }
+    .vod-icon { width:56px; height:56px; border-radius:14px; flex-shrink:0; background:rgba(255,255,255,.07); border:1px solid var(--night-line); display:flex; align-items:center; justify-content:center; color:#fff; }
+    .vod-icon svg { width:26px; height:26px; }
+    .vod-text { flex:1; min-width:0; }
+    .vod-text h3 { color:#fff; font-size:18px; font-weight:800; letter-spacing:-.2px; margin-bottom:4px; }
+    .vod-text p { color:var(--night-text); font-size:13px; line-height:1.55; }
+    .vod-btn { display:inline-flex; align-items:center; gap:8px; flex-shrink:0; background:#fff; color:var(--ink); font-size:12px; font-weight:800; letter-spacing:.8px; text-transform:uppercase; padding:12px 18px; border-radius:8px; }
+    .vod-btn svg { width:14px; height:14px; }
+
+    /* ─── FOOTER ─── */
+    .footer { background:var(--night); color:var(--night-text); margin-top:56px; }
+    .footer-grid { display:grid; grid-template-columns:1.6fr 1fr 1fr 1fr; gap:36px; padding:46px 0 36px; }
+    .f-brand .brand-word { color:#fff; font-size:24px; }
+    .f-brand .brand-word em { color:var(--red); }
+    .f-mission { font-size:13px; line-height:1.7; margin:14px 0 18px; max-width:300px; }
+    .f-badges { display:flex; gap:8px; flex-wrap:wrap; }
+    .f-badge { font-size:10px; font-weight:700; letter-spacing:.8px; text-transform:uppercase; border:1px solid var(--night-line); color:var(--night-text); padding:5px 11px; border-radius:999px; }
+    .f-col h5 { font-size:11px; font-weight:800; letter-spacing:1.4px; text-transform:uppercase; color:#fff; margin-bottom:16px; }
+    .f-col a { display:flex; align-items:center; gap:8px; font-size:13px; color:var(--night-text); text-decoration:none; padding:5px 0; transition:color .15s ease; }
+    .f-col a:hover { color:#fff; }
+    .f-col a svg { width:13px; height:13px; opacity:.5; }
+    .f-bottom { border-top:1px solid var(--night-line); padding:20px 0 26px; font-size:11.5px; line-height:1.8; color:#78808f; display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap; }
+
+    /* ─── REVEAL ANIMATION ─── */
+    .fade-in { opacity:0; transform:translateY(10px); animation:fadeUp .45s cubic-bezier(.2,0,0,1) forwards; }
+    @keyframes fadeUp { to { opacity:1; transform:translateY(0); } }
+    .d1{animation-delay:.04s}.d2{animation-delay:.09s}.d3{animation-delay:.14s}.d4{animation-delay:.19s}.d5{animation-delay:.24s}.d6{animation-delay:.29s}.d7{animation-delay:.34s}
+
+    /* ─── SCROLLBAR ─── */
+    ::-webkit-scrollbar { width:9px; }
+    ::-webkit-scrollbar-track { background:var(--paper); }
+    ::-webkit-scrollbar-thumb { background:#cfcabd; border-radius:6px; border:2px solid var(--paper); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 980px) {
+      .article-grid { grid-template-columns:repeat(2, 1fr); }
+      .footer-grid { grid-template-columns:1fr 1fr; }
+      .masthead-meta { display:none; }
+      .explore-head h1 { font-size:25px; }
+    }
+    @media (max-width: 620px) {
+      .wrap { padding:0 16px; }
+      .article-grid { grid-template-columns:1fr; }
+      .footer-grid { grid-template-columns:1fr; gap:26px; }
+      .brand-word { font-size:24px; }
+      .brand-tag { font-size:9.5px; }
+      .topbar-note { display:none; }
+      .explore-head { padding:26px 20px; }
+      .vod-strip { flex-direction:column; align-items:flex-start; gap:16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ TOP UTILITY BAR ═══ -->
+  <div class="topbar">
+    <div class="wrap topbar-inner">
+      <div class="topbar-left">
+        <span class="live-dot"></span>
+        <span class="topbar-note">Broadcasting live from the source — DPRK state television &amp; radio</span>
+      </div>
+      <div class="topbar-right">
+        <span class="topbar-clock">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Pyongyang&nbsp;<span id="clock">--:--</span>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ MASTHEAD ═══ -->
+  <header class="masthead">
+    <div class="wrap masthead-inner">
+      <a href="/" class="brand">
+        <span class="brand-mark">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+        <span class="brand-text">
+          <span class="brand-word">JUCHE&nbsp;<em>TV</em></span>
+          <span class="brand-tag">Preserving North Korean media</span>
+        </span>
+      </a>
+      <div class="masthead-meta">
+        <span class="mm-flag">Streams by KoryoFront</span><br>
+        Operated by <b>Juche TV</b> — Myanmar &nbsp;·&nbsp; Content partner <b>KoryoFront</b> — South Africa
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══ PRIMARY NAV ═══ -->
+  <nav class="site-nav">
+    <div class="wrap nav-scroll">
+      <a href="/" class="nav-link">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        Live TV
+      </a>
+      <a href="/DPRK.html" class="nav-link active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        Explore DPRK
+      </a>
+      <a href="/schedules" class="nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="3"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Schedule
+      </a>
+      <a href="/Magazine" class="nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        Publications
+      </a>
+      <a href="/VOD.html" class="nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l1.2-3.6a1.5 1.5 0 0 1 1.9-.95l13.4 4.55"/><path d="M3 8.5V19a1.5 1.5 0 0 0 1.5 1.5h15A1.5 1.5 0 0 0 21 19V9.5A1.5 1.5 0 0 0 19.5 8H4.5A1.5 1.5 0 0 0 3 8.5z"/><path d="M7 5l3 3.5"/><path d="M12 3.8l3 3.5"/><path d="M3 8.5h18"/></svg>
+        VOD
+      </a>
+      <a href="about.html" class="nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        About
+      </a>
+      <span class="nav-spacer"></span>
+      <a class="nav-api" href="https://juche-tv-epg-api.vercel.app/api/bloxyplaytv?ch=KCTV&amp;date=2026-08-17" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        EPG API
+      </a>
+    </div>
+  </nav>
+
+  <!-- ═══ MAIN ═══ -->
+  <main class="main">
+    <div class="wrap">
+
+      <section class="explore-head fade-in d1">
+        <div class="explore-kicker">Reference &amp; culture</div>
+        <h1>Explore About DPRK</h1>
+        <p>A growing collection of articles on the Democratic People's Republic of Korea — tourism, national symbols, education, defence, the political system, the economy, and the Socialist Constitution itself.</p>
+      </section>
+
+      <div class="section-head fade-in d1">
+        <h2>All <span>articles</span></h2>
+        <span class="rule"></span>
+      </div>
+
+      <div class="article-grid" id="articleGrid"></div>
+
+    </div>
+  </main>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="footer">
+    <div class="wrap footer-grid">
+      <div class="f-brand">
+        <span class="brand-word">JUCHE&nbsp;<em>TV</em></span>
+        <p class="f-mission">An independent preservation project dedicated to North Korean media — live television and radio, recorded broadcasts, and publications kept as published.</p>
+        <div class="f-badges">
+          <span class="f-badge">Juche TV — Myanmar</span>
+          <span class="f-badge">KoryoFront — South Africa</span>
+        </div>
+      </div>
+      <div class="f-col">
+        <h5>Channels</h5>
+        <a href="/kctv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>Korean Central Television</a>
+        <a href="/KCBS"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>KCBS Radio</a>
+        <a href="/VOK"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>Voice of Korea</a>
+        <a href="/Magazine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>Publications</a>
+        <a href="/VOD.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>Video on Demand</a>
+      </div>
+      <div class="f-col">
+        <h5>Service</h5>
+        <a href="/DPRK.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>Explore About DPRK</a>
+        <a href="about.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>About the Service</a>
+        <a href="/schedules"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>Schedule &amp; EPG</a>
+      </div>
+      <div class="f-col">
+        <h5>Legal</h5>
+        <a href="terms.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>Terms of Service</a>
+        <a href="privacy.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>Privacy Policy</a>
+        <a href="eula.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>EULA</a>
+      </div>
+    </div>
+    <div class="wrap f-bottom">
+      <span>&copy; 2026 Juche TV — Not affiliated with any broadcasting entity.<br>Streams owned by Juche TV / Bloxy Play Comprehensive Channel and KoryoFront.</span>
+      <span>Broadcast content remains the property of its respective owners.<br>All channels &amp; radio provided by KoryoFront (South Africa).</span>
+    </div>
+  </footer>
+
+  <!-- Pyongyang clock -->
+  <script>
+    function updateTime() {
+      const el = document.getElementById('clock');
+      if (!el) return;
+      try {
+        el.textContent = new Intl.DateTimeFormat('en-GB', {
+          timeZone: 'Asia/Pyongyang', hour: '2-digit', minute: '2-digit', hour12: false
+        }).format(new Date());
+      } catch (e) {
+        el.textContent = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+      }
+    }
+    updateTime();
+    setInterval(updateTime, 10000);
+  </script>
+
+  <!-- Article catalogue — shared shape with page.html -->
+  <script>
+    const ARTICLES = [
+      {
+        slug: 'political-system',
+        tag: 'Government',
+        title: "State's Political System",
+        desc: 'The constitutional and governmental framework of the DPRK — the Workers\u2019 Party, the Supreme People\u2019s Assembly and the Socialist Constitution.',
+        banner: 'https://koryofront.org/static-img/political-system.jpg'
+      },
+      {
+        slug: 'constitution',
+        tag: 'Founding document',
+        title: 'The Constitution',
+        desc: 'The full text of the Socialist Constitution of the DPRK, as amended and supplemented at the 1st Session of the 15th Supreme People\u2019s Assembly, March 2026.',
+        banner: 'https://koryofront.org/static-img/constitution.jpg'
+      },
+      {
+        slug: 'socio-economic',
+        tag: 'Economy',
+        title: 'Socio-Economic System',
+        desc: 'Forms of ownership, the Five-Year Economic Development Plan, and the DPRK\u2019s system of free housing and universal healthcare.',
+        banner: 'https://koryofront.org/static-img/socio-economic.jpg'
+      },
+      {
+        slug: 'national-defence',
+        tag: 'Defence',
+        title: 'National Defence',
+        desc: 'The all-people defence system, the Korean People\u2019s Army, and the DPRK\u2019s nuclear forces policy.',
+        banner: 'https://koryofront.org/static-img/national-defence_400x400.jpg'
+      },
+      {
+        slug: 'education',
+        tag: 'Society',
+        title: 'Education',
+        desc: 'Universal 12-year compulsory education, free at every level, from primary school to Kim Il Sung University.',
+        banner: 'https://koryofront.org/static-img/education.jpg'
+      },
+      {
+        slug: 'country-symbols',
+        tag: 'Culture',
+        title: 'Country Symbols',
+        desc: 'The state name, national emblem, flag, anthem, flower, bird, tree and dog of the DPRK.',
+        banner: 'https://koryofront.org/static-img/country-symbols.jpg'
+      },
+      {
+        slug: 'tourism',
+        tag: 'Travel',
+        title: 'Introduction to Tourism',
+        desc: 'Scenic spots, historic sites and cultural experiences in the DPRK — from Pyongyang to Mount Paektu.',
+        banner: 'https://koryofront.org/static-img/tourism.jpg'
+      }
+    ];
+
+    const grid = document.getElementById('articleGrid');
+    const frag = document.createDocumentFragment();
+
+    ARTICLES.forEach((a, i) => {
+      const card = document.createElement('a');
+      card.href = 'page.html?article=' + encodeURIComponent(a.slug);
+      card.className = 'article-card fade-in d' + Math.min(((i % 6) + 1), 7);
+
+      card.innerHTML = `
+        <div class="article-media">
+          <span class="article-tag">${a.tag}</span>
+          <img src="${a.banner}" alt="${a.title}" loading="lazy">
+        </div>
+        <div class="article-body">
+          <h3>${a.title}</h3>
+          <p>${a.desc}</p>
+          <div class="article-foot">
+            <span class="tag">Article</span>
+            <span class="article-cta">Read
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+            </span>
+          </div>
+        </div>
+      `;
+      frag.appendChild(card);
+    });
+
+    grid.appendChild(frag);
+  </script>
+</body>
+</html>
