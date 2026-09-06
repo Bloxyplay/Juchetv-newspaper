@@ -80,7 +80,7 @@ jobs:
           ffmpeg -loglevel info \
             -reconnect 1 -reconnect_at_eof 1 -reconnect_streamed 1 -reconnect_delay_max 5 \
             -err_detect ignore_err \
-            -i "https://kctv.koryofront.org/stream/sports/index.m3u8" \
+            -i "http://60.12.124.166:1935/live/myStream2/playlist.m3u8" \
             -filter_complex "[0:a]asendcmd=f=pitch.cmd,rubberband=pitch=1.0:smoothing=on:formant=preserved[audio]" \
             -map 0:v -map "[audio]" \
             -c:v libx264 -preset veryfast -b:v 4500k -maxrate 4500k -bufsize 9000k \
