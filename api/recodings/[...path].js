@@ -1,6 +1,4 @@
-// api/kfs.js — proxy for Koryo Front Storage API
-// Forwards GET requests to https://files.koryofront.org/kfs/<path>?<query>
-
+// api/recodings/[...path].js — Koryo Front Storage API proxy
 const UPSTREAM = "https://files.koryofront.org/kfs";
 
 export default async function handler(req, res) {
@@ -11,11 +9,12 @@ export default async function handler(req, res) {
   if (req.method === "OPTIONS") return res.status(204).end();
   if (req.method !== "GET") return res.status(405).json({ error: "Method not allowed" });
 
-  // catch-all route segments (e.g. /api/kfs/share/TOKEN/folder/SLUG)
+  // catch-all segments: /api/recodings/share/TOKEN/folder/SLUG
+  // becomes req.query.path = ["share", "TOKEN", "folder", "SLUG"]
   let segs = req.query.path || "";
   if (Array.isArray(segs)) segs = segs.join("/");
 
-  // rebuild query string, excluding internal "path" param
+  // rebuild query string (e.g. ?slug=xxx), excluding internal "path"
   const params = new URLSearchParams();
   for (const [k, v] of Object.entries(req.query)) {
     if (k === "path") continue;
