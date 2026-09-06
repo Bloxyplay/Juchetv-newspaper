@@ -1,0 +1,86 @@
+name: Stream KCTV to YouTube with Pitch Modulation
+
+on:
+  workflow_dispatch:
+
+jobs:
+  stream:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360   # hard stop at 6 hours
+    steps:
+      - name: Install dependencies & download static FFmpeg (with rubberband)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq wget tar xz-utils
+          # John Van Sickle's static build includes --enable-librubberband
+          wget -q --show-progress https://johnvansickle.com/ffmpeg/builds/ffmpeg-git-amd64-static.tar.xz
+          tar -xf ffmpeg-git-amd64-static.tar.xz
+          mv ffmpeg-*-static ffmpeg-static
+          sudo cp ffmpeg-static/ffmpeg /usr/local/bin/ffmpeg
+          sudo cp ffmpeg-static/ffprobe /usr/local/bin/ffprobe
+          ffmpeg -version | head -n 1
+          # verify rubberband filter exists
+          ffmpeg -filters 2>/dev/null | grep -q rubberband || { echo "ERROR: rubberband filter missing"; exit 1; }
+          echo "rubberband filter confirmed"
+
+      - name: Generate pitch-modulation command file
+        run: |
+          python3 << 'PYEOF'
+          import math
+
+          # -0.34 semitones as a frequency ratio
+          PITCH_FACTOR = 2 ** (-0.34 / 12)   # ≈ 0.980392
+          CYCLE        = 50.0                 # 10 s down + 10 s up + 30 s normal
+          TOTAL        = 6 * 60 * 60          # 6 hours
+          STEP         = 0.5                  # update every 0.5 s for smoothness
+
+          lines = []
+          cycle = 0
+          while cycle * CYCLE < TOTAL:
+              base = cycle * CYCLE
+
+              # Phase 1: slowly pitch down to -0.34 over 10 s
+              for i in range(int(10.0 / STEP) + 1):
+                  t = base + i * STEP
+                  if t >= TOTAL:
+                      break
+                  progress = (i * STEP) / 10.0
+                  pitch = 1.0 + (PITCH_FACTOR - 1.0) * progress
+                  lines.append(f"{t:.1f} [enter] rubberband pitch {pitch:.6f};")
+
+              # Phase 2: slowly return to normal over 10 s
+              for i in range(int(10.0 / STEP) + 1):
+                  t = base + 10.0 + i * STEP
+                  if t >= TOTAL:
+                      break
+                  progress = (i * STEP) / 10.0
+                  pitch = PITCH_FACTOR + (1.0 - PITCH_FACTOR) * progress
+                  lines.append(f"{t:.1f} [enter] rubberband pitch {pitch:.6f};")
+
+              # Phase 3: keep normal for 30 s (ensure reset to 1.0 at start)
+              t = base + 20.0
+              if t < TOTAL:
+                  lines.append(f"{t:.1f} [enter] rubberband pitch 1.0;")
+
+              cycle += 1
+
+          with open("pitch.cmd", "w") as f:
+              f.write("\n".join(lines) + "\n")
+
+          print(f"Generated {len(lines)} commands across {cycle} cycles (~{cycle*CYCLE/3600:.1f} h)")
+          PYEOF
+
+      - name: Stream to YouTube (6-hour limit)
+        env:
+          YOUTUBE_STREAM_KEY: ${{ secrets.YOUTUBE_STREAM_KEY }}
+        run: |
+          timeout 21600 ffmpeg \
+            -reconnect 1 -reconnect_at_eof 1 -reconnect_streamed 1 -reconnect_delay_max 5 \
+            -err_detect ignore_err \
+            -i "https://kctv.koryofront.org/stream/sports/index.m3u8" \
+            -filter_complex "[0:a]asendcmd=f=pitch.cmd,rubberband=pitch=1.0:smoothing=on:formant=preserved[audio]" \
+            -map 0:v -map "[audio]" \
+            -c:v libx264 -preset veryfast -b:v 4500k -maxrate 4500k -bufsize 9000k \
+            -pix_fmt yuv420p -g 60 -keyint_min 60 -r 30 \
+            -c:a aac -b:a 128k -ar 44100 \
+            -f flv "rtmp://a.rtmp.youtube.com/live2/${YOUTUBE_STREAM_KEY}"
