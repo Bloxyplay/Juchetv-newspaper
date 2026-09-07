@@ -1,5 +1,4 @@
 export default async function handler(req, res) {
-  // 1. Extract slug from query parameter
   const { slug } = req.query;
 
   if (!slug) {
@@ -7,7 +6,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    // 2. Validate slug against external API
+    // Fetch validation data
     const validateRes = await fetch('https://resources-juchetv.vercel.app/api/recodings/folders.js');
     
     if (!validateRes.ok) {
@@ -15,19 +14,45 @@ export default async function handler(req, res) {
     }
 
     const validateData = await validateRes.json();
-    const subfolders = validateData?.data?.subfolders || [];
     
-    // Check if the provided slug exists in any subfolder
-    const isValidSlug = subfolders.some(folder => folder.slug === slug);
+    // Collect ALL valid slugs: parent folder + all subfolders
+    const validSlugs = [];
+    
+    // Add parent folder slug if exists
+    if (validateData?.data?.slug) {
+      validSlugs.push(validateData.data.slug);
+    }
+    
+    // Add all subfolder slugs
+    const subfolders = validateData?.data?.subfolders || [];
+    subfolders.forEach(folder => {
+      if (folder.slug) validSlugs.push(folder.slug);
+    });
+
+    // DEBUG: Show what was received vs what's valid (remove this in production)
+    const debugInfo = {
+      receivedSlug: slug,
+      totalValidSlugs: validSlugs.length,
+      validSlugs: validSlugs, // Remove this line in production for security
+      parentSlug: validateData?.data?.slug || null,
+      subfolderSlugs: subfolders.map(f => f.slug)
+    };
+
+    // Check if provided slug exists
+    const isValidSlug = validSlugs.includes(slug);
 
     if (!isValidSlug) {
-      return res.status(403).json({ error: 'Invalid or unauthorized slug' });
+      return res.status(403).json({ 
+        error: 'Invalid slug',
+        message: `Slug "${slug}" was not found in the allowed list.`,
+        debug: debugInfo // Remove this in production
+      });
     }
 
-    // 3. Build target URL using the validated slug
+    // Build target URL with validated slug
     const targetUrl = `https://files.koryofront.org/kfs/share/72ec96e040527caf157e69ccf703a20e/dl?slug=${encodeURIComponent(slug)}`;
 
-    // 4. Send request without following redirects automatically
+    // Extract direct download link
     const initialResponse = await fetch(targetUrl, {
       method: 'GET',
       redirect: 'manual',
@@ -36,10 +61,8 @@ export default async function handler(req, res) {
       },
     });
 
-    // 5. Extract the final target URL from the redirect header or response location
     let finalUrl = initialResponse.headers.get('location');
 
-    // If fetch followed the redirect anyway or returned 200, use response.url
     if (!finalUrl && initialResponse.url && initialResponse.url !== targetUrl) {
       finalUrl = initialResponse.url;
     }
@@ -48,12 +71,13 @@ export default async function handler(req, res) {
       return res.status(404).json({ error: 'Could not extract direct video URL' });
     }
 
-    // 6. Optional query flag to just retrieve the direct link
     if (req.query.json === 'true') {
-      return res.status(200).json({ directUrl: finalUrl });
+      return res.status(200).json({ 
+        directUrl: finalUrl,
+        validatedSlug: slug 
+      });
     }
 
-    // 7. Redirect the client directly to the final CDN video link
     return res.redirect(302, finalUrl);
 
   } catch (error) {
