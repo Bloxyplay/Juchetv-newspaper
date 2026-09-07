@@ -2,11 +2,13 @@ export default async function handler(req, res) {
   const { slug } = req.query;
 
   if (!slug) {
-    return res.status(400).json({ error: 'Missing slug parameter. Use ?slug=YOUR_SLUG' });
+    return res.status(400).json({ 
+      error: 'Missing slug parameter. Use ?slug=YOUR_SLUG' 
+    });
   }
 
   try {
-    // Fetch validation data
+    // 1. Fetch and validate against folders API
     const validateRes = await fetch('https://resources-juchetv.vercel.app/api/recodings/folders.js');
     
     if (!validateRes.ok) {
@@ -15,44 +17,30 @@ export default async function handler(req, res) {
 
     const validateData = await validateRes.json();
     
-    // Collect ALL valid slugs: parent folder + all subfolders
-    const validSlugs = [];
+    // Collect all valid slugs (parent + subfolders)
+    const validSlugs = new Set();
     
-    // Add parent folder slug if exists
     if (validateData?.data?.slug) {
-      validSlugs.push(validateData.data.slug);
+      validSlugs.add(validateData.data.slug);
     }
     
-    // Add all subfolder slugs
     const subfolders = validateData?.data?.subfolders || [];
     subfolders.forEach(folder => {
-      if (folder.slug) validSlugs.push(folder.slug);
+      if (folder.slug) validSlugs.add(folder.slug);
     });
 
-    // DEBUG: Show what was received vs what's valid (remove this in production)
-    const debugInfo = {
-      receivedSlug: slug,
-      totalValidSlugs: validSlugs.length,
-      validSlugs: validSlugs, // Remove this line in production for security
-      parentSlug: validateData?.data?.slug || null,
-      subfolderSlugs: subfolders.map(f => f.slug)
-    };
-
-    // Check if provided slug exists
-    const isValidSlug = validSlugs.includes(slug);
-
-    if (!isValidSlug) {
+    // 2. Check if requested slug is authorized
+    if (!validSlugs.has(slug)) {
       return res.status(403).json({ 
         error: 'Invalid slug',
-        message: `Slug "${slug}" was not found in the allowed list.`,
-        debug: debugInfo // Remove this in production
+        message: `Slug "${slug}" is not in the authorized folders list.`
       });
     }
 
-    // Build target URL with validated slug
-    const targetUrl = `https://files.koryofront.org/kfs/share/72ec96e040527caf157e69ccf703a20e/dl?slug=${encodeURIComponent(slug)}`;
+    // 3. Build the correct folder URL
+    const targetUrl = `https://files.koryofront.org/kfs/share/72ec96e040527caf157e69ccf703a20e/folder/${encodeURIComponent(slug)}`;
 
-    // Extract direct download link
+    // 4. Fetch to extract the redirect/final URL
     const initialResponse = await fetch(targetUrl, {
       method: 'GET',
       redirect: 'manual',
@@ -68,13 +56,16 @@ export default async function handler(req, res) {
     }
 
     if (!finalUrl) {
-      return res.status(404).json({ error: 'Could not extract direct video URL' });
+      return res.status(404).json({ 
+        error: 'Could not extract direct video URL' 
+      });
     }
 
+    // 5. Return JSON or redirect
     if (req.query.json === 'true') {
       return res.status(200).json({ 
         directUrl: finalUrl,
-        validatedSlug: slug 
+        slug: slug 
       });
     }
 
