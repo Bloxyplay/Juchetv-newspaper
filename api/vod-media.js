@@ -1,6 +1,6 @@
 // api/media.js
-import { readFile } from "fs/promises";
-import path from "path";
+const fs = require("fs");
+const path = require("path");
 
 const SOURCE_URL = "https://koryofront.org/api/kctv/media-list";
 
@@ -29,7 +29,7 @@ const hash5 = (str) => {
   return out;
 };
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -39,7 +39,6 @@ export default async function handler(req, res) {
   if (req.method !== "GET") return res.status(405).json({ error: "Method not allowed" });
 
   try {
-    // Fetch koryofront upstream
     const upstream = await fetch(SOURCE_URL, {
       headers: {
         "User-Agent": "Mozilla/5.0 (compatible; KCTV-Proxy/1.0)",
@@ -56,11 +55,10 @@ export default async function handler(req, res) {
 
     const raw = await upstream.json();
 
-    // Read local media.json from /media folder in same repo
     let githubData = { videos: [] };
     try {
       const mediaPath = path.join(process.cwd(), "media", "media.json");
-      const fileContent = await readFile(mediaPath, "utf-8");
+      const fileContent = fs.readFileSync(mediaPath, "utf-8");
       githubData = JSON.parse(fileContent);
     } catch (fileErr) {
       console.warn("Could not load local media.json:", fileErr.message);
@@ -197,4 +195,5 @@ export default async function handler(req, res) {
     console.error("Proxy error:", err);
     return res.status(500).json({ error: "Internal server error", message: err.message });
   }
-}
+};
+        
