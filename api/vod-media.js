@@ -1,4 +1,7 @@
 // api/media.js
+import { readFile } from "fs/promises";
+import path from "path";
+
 const SOURCE_URL = "https://koryofront.org/api/kctv/media-list";
 
 const slugify = (text) =>
@@ -36,6 +39,7 @@ export default async function handler(req, res) {
   if (req.method !== "GET") return res.status(405).json({ error: "Method not allowed" });
 
   try {
+    // Fetch koryofront upstream
     const upstream = await fetch(SOURCE_URL, {
       headers: {
         "User-Agent": "Mozilla/5.0 (compatible; KCTV-Proxy/1.0)",
@@ -51,6 +55,16 @@ export default async function handler(req, res) {
     }
 
     const raw = await upstream.json();
+
+    // Read local media.json from /media folder in same repo
+    let githubData = { videos: [] };
+    try {
+      const mediaPath = path.join(process.cwd(), "media", "media.json");
+      const fileContent = await readFile(mediaPath, "utf-8");
+      githubData = JSON.parse(fileContent);
+    } catch (fileErr) {
+      console.warn("Could not load local media.json:", fileErr.message);
+    }
 
     const newsThumb = "https://resources-juchetv.vercel.app/News.png";
     const koryoThumb = (url) =>
@@ -69,16 +83,50 @@ export default async function handler(req, res) {
         categoryName,
       }));
 
+    const transformGithubItems = (items) =>
+      (items || []).map((item) => ({
+        id: `github-${slugify(item.title)}-${hash5(item.videoUrl)}`,
+        title: item.title,
+        date: item.date,
+        videoUrl: item.videoUrl,
+        thumbnail: item.thumbnail || newsThumb,
+        type: "video",
+        source: "github",
+        category: item.category || "external",
+        categoryName: item.categoryName || "External Media",
+        description: item.description || "",
+      }));
+
     const newsName = "News Report 【8PM】";
     const activitiesName = raw.activitiesTitle || "Revolutionary Activities";
     const lifestyleName = "Lifestyle & Culture";
+
+    const githubVideos = transformGithubItems(githubData.videos);
+
+    const githubCategories = {};
+    githubVideos.forEach((video) => {
+      if (!githubCategories[video.category]) {
+        githubCategories[video.category] = {
+          id: video.category,
+          slug: video.category,
+          name: video.categoryName,
+          items: [],
+        };
+      }
+      githubCategories[video.category].items.push(video);
+    });
 
     const transformed = {
       meta: {
         totalItems:
           (raw.news?.length || 0) +
           (raw.activities?.length || 0) +
-          (raw.societyAndCulture?.length || 0),
+          (raw.societyAndCulture?.length || 0) +
+          githubVideos.length,
+        sources: {
+          koryofront: true,
+          github: githubVideos.length > 0,
+        },
       },
       categories: [
         {
@@ -99,15 +147,25 @@ export default async function handler(req, res) {
           name: lifestyleName,
           items: transformItems(raw.societyAndCulture, "lifestyle-culture", lifestyleName),
         },
+        ...Object.values(githubCategories),
       ],
       feed: [
         ...transformItems(raw.news, "news", newsName, newsThumb),
         ...transformItems(raw.activities, "activities", activitiesName),
         ...transformItems(raw.societyAndCulture, "lifestyle-culture", lifestyleName),
+        ...githubVideos,
       ].sort((a, b) => new Date(b.date) - new Date(a.date)),
     };
 
-    const { category, limit, dateFrom, dateTo } = req.query;
+    const { category, limit, dateFrom, dateTo, source } = req.query;
+
+    if (source) {
+      transformed.feed = transformed.feed.filter((f) => f.source === source);
+      transformed.categories = transformed.categories.map((cat) => ({
+        ...cat,
+        items: cat.items.filter((item) => item.source === source),
+      }));
+    }
 
     if (category) {
       transformed.categories = transformed.categories.filter(
