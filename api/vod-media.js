@@ -1,8 +1,8 @@
 // api/media.js
-const fs = require("fs");
-const path = require("path");
-
 const SOURCE_URL = "https://koryofront.org/api/kctv/media-list";
+
+// GitHub raw content URL - replace with your repo details
+const GITHUB_MEDIA_URL = "https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/media/media.json";
 
 const slugify = (text) =>
   text
@@ -29,7 +29,7 @@ const hash5 = (str) => {
   return out;
 };
 
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -39,29 +39,41 @@ module.exports = async function handler(req, res) {
   if (req.method !== "GET") return res.status(405).json({ error: "Method not allowed" });
 
   try {
-    const upstream = await fetch(SOURCE_URL, {
-      headers: {
-        "User-Agent": "Mozilla/5.0 (compatible; KCTV-Proxy/1.0)",
-        Accept: "application/json",
-      },
-    });
+    // Fetch from both sources in parallel
+    const [upstream, githubMedia] = await Promise.allSettled([
+      fetch(SOURCE_URL, {
+        headers: {
+          "User-Agent": "Mozilla/5.0 (compatible; KCTV-Proxy/1.0)",
+          Accept: "application/json",
+        },
+      }),
+      fetch(GITHUB_MEDIA_URL, {
+        headers: {
+          "User-Agent": "Mozilla/5.0 (compatible; KCTV-Proxy/1.0)",
+          Accept: "application/json",
+        },
+      }),
+    ]);
 
-    if (!upstream.ok) {
-      return res.status(upstream.status).json({
+    // Handle upstream (koryofront) source
+    let raw = { news: [], activities: [], societyAndCulture: [] };
+    if (upstream.status === "fulfilled" && upstream.value.ok) {
+      raw = await upstream.value.json();
+    } else if (upstream.status === "fulfilled") {
+      return res.status(upstream.value.status).json({
         error: "Upstream fetch failed",
-        upstreamStatus: upstream.status,
+        upstreamStatus: upstream.value.status,
       });
     }
 
-    const raw = await upstream.json();
-
+    // Handle GitHub media source
     let githubData = { videos: [] };
-    try {
-      const mediaPath = path.join(process.cwd(), "media", "media.json");
-      const fileContent = fs.readFileSync(mediaPath, "utf-8");
-      githubData = JSON.parse(fileContent);
-    } catch (fileErr) {
-      console.warn("Could not load local media.json:", fileErr.message);
+    if (githubMedia.status === "fulfilled" && githubMedia.value.ok) {
+      try {
+        githubData = await githubMedia.value.json();
+      } catch (e) {
+        console.error("Failed to parse GitHub media JSON:", e);
+      }
     }
 
     const newsThumb = "https://resources-juchetv.vercel.app/News.png";
@@ -81,6 +93,7 @@ module.exports = async function handler(req, res) {
         categoryName,
       }));
 
+    // Transform GitHub media items
     const transformGithubItems = (items) =>
       (items || []).map((item) => ({
         id: `github-${slugify(item.title)}-${hash5(item.videoUrl)}`,
@@ -99,8 +112,10 @@ module.exports = async function handler(req, res) {
     const activitiesName = raw.activitiesTitle || "Revolutionary Activities";
     const lifestyleName = "Lifestyle & Culture";
 
+    // Transform GitHub videos
     const githubVideos = transformGithubItems(githubData.videos);
 
+    // Group GitHub videos by category
     const githubCategories = {};
     githubVideos.forEach((video) => {
       if (!githubCategories[video.category]) {
@@ -122,8 +137,8 @@ module.exports = async function handler(req, res) {
           (raw.societyAndCulture?.length || 0) +
           githubVideos.length,
         sources: {
-          koryofront: true,
-          github: githubVideos.length > 0,
+          koryofront: upstream.status === "fulfilled" && upstream.value.ok,
+          github: githubMedia.status === "fulfilled" && githubMedia.value.ok,
         },
       },
       categories: [
@@ -157,6 +172,7 @@ module.exports = async function handler(req, res) {
 
     const { category, limit, dateFrom, dateTo, source } = req.query;
 
+    // Filter by source if specified
     if (source) {
       transformed.feed = transformed.feed.filter((f) => f.source === source);
       transformed.categories = transformed.categories.map((cat) => ({
@@ -195,5 +211,4 @@ module.exports = async function handler(req, res) {
     console.error("Proxy error:", err);
     return res.status(500).json({ error: "Internal server error", message: err.message });
   }
-};
-        
+}
