@@ -1,11 +1,10 @@
-// api/media.js
 import { readFile } from "fs/promises";
 import path from "path";
 
 const SOURCE_URL = "https://koryofront.org/api/kctv/media-list";
 
 const slugify = (text) =>
-  text
+  (text || "")
     .toString()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
@@ -18,8 +17,9 @@ const slugify = (text) =>
 
 const hash5 = (str) => {
   let h = 0;
-  for (let i = 0; i < str.length; i++) {
-    h = ((h << 5) - h + str.charCodeAt(i)) & 0xfffffff;
+  const s = str || "";
+  for (let i = 0; i < s.length; i++) {
+    h = ((h << 5) - h + s.charCodeAt(i)) & 0xfffffff;
   }
   const chars = "abcdefghijklmnopqrstuvwxyz";
   let out = "";
@@ -39,24 +39,25 @@ export default async function handler(req, res) {
   if (req.method !== "GET") return res.status(405).json({ error: "Method not allowed" });
 
   try {
-    // Fetch koryofront upstream
-    const upstream = await fetch(SOURCE_URL, {
-      headers: {
-        "User-Agent": "Mozilla/5.0 (compatible; KCTV-Proxy/1.0)",
-        Accept: "application/json",
-      },
-    });
-
-    if (!upstream.ok) {
-      return res.status(upstream.status).json({
-        error: "Upstream fetch failed",
-        upstreamStatus: upstream.status,
+    // 1. Fetch upstream data with fallback error handling
+    let raw = { news: [], activities: [], societyAndCulture: [] };
+    try {
+      const upstream = await fetch(SOURCE_URL, {
+        headers: {
+          "User-Agent": "Mozilla/5.0 (compatible; KCTV-Proxy/1.0)",
+          Accept: "application/json",
+        },
       });
+      if (upstream.ok) {
+        raw = await upstream.json();
+      } else {
+        console.warn(`Upstream failed with status: ${upstream.status}`);
+      }
+    } catch (upstreamErr) {
+      console.warn("Could not fetch upstream API:", upstreamErr.message);
     }
 
-    const raw = await upstream.json();
-
-    // Read local media.json from /media folder in same repo
+    // 2. Read local media.json from /media folder securely across serverless platforms
     let githubData = { videos: [] };
     try {
       const mediaPath = path.join(process.cwd(), "media", "media.json");
@@ -103,6 +104,7 @@ export default async function handler(req, res) {
 
     const githubVideos = transformGithubItems(githubData.videos);
 
+    // Group local videos dynamically by their custom category (e.g., "manbang")
     const githubCategories = {};
     githubVideos.forEach((video) => {
       if (!githubCategories[video.category]) {
@@ -124,7 +126,7 @@ export default async function handler(req, res) {
           (raw.societyAndCulture?.length || 0) +
           githubVideos.length,
         sources: {
-          koryofront: true,
+          koryofront: (raw.news?.length || 0) > 0 || (raw.activities?.length || 0) > 0,
           github: githubVideos.length > 0,
         },
       },
@@ -154,7 +156,7 @@ export default async function handler(req, res) {
         ...transformItems(raw.activities, "activities", activitiesName),
         ...transformItems(raw.societyAndCulture, "lifestyle-culture", lifestyleName),
         ...githubVideos,
-      ].sort((a, b) => new Date(b.date) - new Date(a.date)),
+      ].sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0)),
     };
 
     const { category, limit, dateFrom, dateTo, source } = req.query;
