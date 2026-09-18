@@ -1,8 +1,8 @@
 // api/media.js
-const SOURCE_URL = "https://koryofront.org/api/kctv/media-list";
+import { readFile } from "fs/promises";
+import path from "path";
 
-// GitHub raw content URL - replace with your repo details
-const GITHUB_MEDIA_URL = "https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/media/media.json";
+const SOURCE_URL = "https://koryofront.org/api/kctv/media-list";
 
 const slugify = (text) =>
   text
@@ -39,41 +39,31 @@ export default async function handler(req, res) {
   if (req.method !== "GET") return res.status(405).json({ error: "Method not allowed" });
 
   try {
-    // Fetch from both sources in parallel
-    const [upstream, githubMedia] = await Promise.allSettled([
-      fetch(SOURCE_URL, {
-        headers: {
-          "User-Agent": "Mozilla/5.0 (compatible; KCTV-Proxy/1.0)",
-          Accept: "application/json",
-        },
-      }),
-      fetch(GITHUB_MEDIA_URL, {
-        headers: {
-          "User-Agent": "Mozilla/5.0 (compatible; KCTV-Proxy/1.0)",
-          Accept: "application/json",
-        },
-      }),
-    ]);
+    // Fetch koryofront upstream
+    const upstream = await fetch(SOURCE_URL, {
+      headers: {
+        "User-Agent": "Mozilla/5.0 (compatible; KCTV-Proxy/1.0)",
+        Accept: "application/json",
+      },
+    });
 
-    // Handle upstream (koryofront) source
-    let raw = { news: [], activities: [], societyAndCulture: [] };
-    if (upstream.status === "fulfilled" && upstream.value.ok) {
-      raw = await upstream.value.json();
-    } else if (upstream.status === "fulfilled") {
-      return res.status(upstream.value.status).json({
+    if (!upstream.ok) {
+      return res.status(upstream.status).json({
         error: "Upstream fetch failed",
-        upstreamStatus: upstream.value.status,
+        upstreamStatus: upstream.status,
       });
     }
 
-    // Handle GitHub media source
+    const raw = await upstream.json();
+
+    // Read local media.json from /media folder in same repo
     let githubData = { videos: [] };
-    if (githubMedia.status === "fulfilled" && githubMedia.value.ok) {
-      try {
-        githubData = await githubMedia.value.json();
-      } catch (e) {
-        console.error("Failed to parse GitHub media JSON:", e);
-      }
+    try {
+      const mediaPath = path.join(process.cwd(), "media", "media.json");
+      const fileContent = await readFile(mediaPath, "utf-8");
+      githubData = JSON.parse(fileContent);
+    } catch (fileErr) {
+      console.warn("Could not load local media.json:", fileErr.message);
     }
 
     const newsThumb = "https://resources-juchetv.vercel.app/News.png";
@@ -93,7 +83,6 @@ export default async function handler(req, res) {
         categoryName,
       }));
 
-    // Transform GitHub media items
     const transformGithubItems = (items) =>
       (items || []).map((item) => ({
         id: `github-${slugify(item.title)}-${hash5(item.videoUrl)}`,
@@ -112,10 +101,8 @@ export default async function handler(req, res) {
     const activitiesName = raw.activitiesTitle || "Revolutionary Activities";
     const lifestyleName = "Lifestyle & Culture";
 
-    // Transform GitHub videos
     const githubVideos = transformGithubItems(githubData.videos);
 
-    // Group GitHub videos by category
     const githubCategories = {};
     githubVideos.forEach((video) => {
       if (!githubCategories[video.category]) {
@@ -137,8 +124,8 @@ export default async function handler(req, res) {
           (raw.societyAndCulture?.length || 0) +
           githubVideos.length,
         sources: {
-          koryofront: upstream.status === "fulfilled" && upstream.value.ok,
-          github: githubMedia.status === "fulfilled" && githubMedia.value.ok,
+          koryofront: true,
+          github: githubVideos.length > 0,
         },
       },
       categories: [
@@ -172,7 +159,6 @@ export default async function handler(req, res) {
 
     const { category, limit, dateFrom, dateTo, source } = req.query;
 
-    // Filter by source if specified
     if (source) {
       transformed.feed = transformed.feed.filter((f) => f.source === source);
       transformed.categories = transformed.categories.map((cat) => ({
