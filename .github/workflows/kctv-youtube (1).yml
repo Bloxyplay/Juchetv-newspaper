@@ -1,0 +1,209 @@
+name: KCTV → YouTube
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 */6 * * *"   # fallback if the self-restart chain ever breaks
+
+concurrency:
+  group: kctv-youtube
+  cancel-in-progress: false
+
+permissions:
+  actions: write   # lets the job dispatch its own successor
+  contents: read
+
+jobs:
+  stream:
+    runs-on: ubuntu-latest
+    timeout-minutes: 358
+    env:
+      VIDEO_URL: https://live.koryocdn.org/kctv/video.m3u8
+      SUBS_URL: https://live.koryocdn.org/kctv/subs/en.m3u8
+      SUB_LATENCY: "45"   # seconds behind live (same as the site's ?livesync default) so captions exist when a frame plays
+      SUB_OFFSET: "0"     # fine sync in seconds: + = captions later, - = earlier
+      YT_KEY: ${{ secrets.YOUTUBE_SUBTITLES_KCTV }}
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - name: Install ffmpeg
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg fonts-dejavu-core
+
+      - name: Write streamer
+        run: |
+          cat > stream.py <<'PY'
+          import html, math, os, re, subprocess, textwrap, threading, urllib.parse, urllib.request
+
+          VIDEO, SUBS, KEY = os.environ["VIDEO_URL"], os.environ["SUBS_URL"], os.environ["YT_KEY"]
+          LATENCY = float(os.environ.get("SUB_LATENCY", "45"))
+          OFFSET = float(os.environ.get("SUB_OFFSET", "0"))
+          FONT = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
+          TXT, TMP = "/tmp/sub.txt", "/tmp/sub.txt.tmp"
+          UA = {"User-Agent": "Mozilla/5.0"}
+
+          lock = threading.Lock()
+          cues = []          # (start, end, text) on the video's own PTS clock, seconds
+          stop = threading.Event()
+
+
+          def get(u):
+              r = urllib.request.Request(u, headers=UA)
+              return urllib.request.urlopen(r, timeout=10).read().decode("utf-8", "replace")
+
+
+          def ts(s):
+              p = [float(x) for x in s.strip().replace(",", ".").split(":")]
+              while len(p) < 3:
+                  p.insert(0, 0.0)
+              return p[0] * 3600 + p[1] * 60 + p[2]
+
+
+          def parse(vtt):
+              """-> (offset, cues). offset = MPEGTS/90000 - LOCAL from X-TIMESTAMP-MAP, like hls.js."""
+              vtt = vtt.replace("\r", "")
+              mp, lo = re.search(r"MPEGTS:(\d+)", vtt), re.search(r"LOCAL:([\d:.,]+)", vtt)
+              off = int(mp.group(1)) / 90000 - ts(lo.group(1)) if mp and lo else None
+              out = []
+              for block in re.split(r"\n\s*\n", vtt):
+                  lines = [l for l in block.split("\n") if l.strip()]
+                  for i, l in enumerate(lines):
+                      if "-->" in l:
+                          a, b = l.split("-->")
+                          text = html.unescape(re.sub(r"<[^>]*>", "", "\n".join(lines[i + 1:]))).strip()
+                          if text:
+                              out.append((ts(a), ts(b.split()[0]), text))
+                          break
+              return off, out
+
+
+          def fetch_subs():
+              seen, fails, keys, warned = set(), {}, set(), False
+              while not stop.is_set():
+                  try:
+                      pl = get(SUBS)
+                      segs = [urllib.parse.urljoin(SUBS, l.strip())
+                              for l in pl.splitlines() if l.strip() and not l.startswith("#")]
+                      for s in segs:
+                          if s in seen:
+                              continue
+                          try:
+                              off, cs = parse(get(s))
+                          except Exception as e:
+                              fails[s] = fails.get(s, 0) + 1
+                              if fails[s] >= 3:
+                                  seen.add(s)
+                              print("subs:", s.rsplit("/", 1)[-1], e, flush=True)
+                              continue
+                          seen.add(s)
+                          if cs and off is None:
+                              if not warned:
+                                  print("subs: no X-TIMESTAMP-MAP, assuming cue times are already video PTS", flush=True)
+                                  warned = True
+                              off = 0.0
+                          new = []
+                          for a, b, t in cs:
+                              k = (round(a + off, 2), t)
+                              if k not in keys:
+                                  keys.add(k)
+                                  new.append((a + off + OFFSET, b + off + OFFSET, t))
+                          if new:
+                              with lock:
+                                  cues.extend(new)
+                  except Exception as e:
+                      print("subs:", e, flush=True)
+                  stop.wait(2)
+
+
+          def live_index():
+              """HLS segments to stay behind live so ~LATENCY seconds of captions are already published."""
+              d = 6.0
+              try:
+                  txt = get(VIDEO)
+                  if "#EXT-X-STREAM-INF" in txt:
+                      v = [l.strip() for l in txt.splitlines() if l.strip() and not l.startswith("#")][0]
+                      txt = get(urllib.parse.urljoin(VIDEO, v))
+                  ex = [float(x) for x in re.findall(r"#EXTINF:([\d.]+)", txt)]
+                  tg = re.search(r"#EXT-X-TARGETDURATION:(\d+)", txt)
+                  d = sum(ex) / len(ex) if ex else (float(tg.group(1)) if tg else 6.0)
+              except Exception as e:
+                  print("live_index:", e, flush=True)
+              return -max(3, math.ceil(LATENCY / d))
+
+
+          def caption_at(pts):
+              """Active cues at this video time, one block each, stacked (same as the site's player)."""
+              with lock:
+                  cues[:] = [c for c in cues if c[1] > pts - 30]
+                  cur = sorted(c for c in cues if c[0] <= pts < c[1])
+              lines = []
+              for _, _, t in cur:
+                  for l in t.split("\n"):
+                      lines += textwrap.wrap(l, 50) or [""]
+              return "\n".join(lines)
+
+
+          def put(text):
+              with open(TMP, "w", encoding="utf-8") as f:
+                  f.write(text)
+              os.replace(TMP, TXT)
+
+
+          def main():
+              put("")
+              threading.Thread(target=fetch_subs, daemon=True).start()
+              vf = ",".join([
+                  "metadata=mode=add:key=kj:value=1,metadata=mode=print:key=kj",   # logs each frame's pts so captions follow the video clock
+                  "scale=-2:720", "fps=30",
+                  f"drawtext=fontfile={FONT}:textfile={TXT}:reload=1:expansion=none:fontcolor=white:fontsize=30"
+                  ":box=1:boxcolor=0x080a10@0.78:boxborderw=12:line_spacing=6:x=(w-text_w)/2:y=h-text_h-h*0.1",
+              ])
+              cmd = ["ffmpeg", "-hide_banner", "-nostats", "-loglevel", "level+info",
+                     "-re", "-live_start_index", str(live_index()), "-rw_timeout", "15000000", "-i", VIDEO,
+                     "-vf", vf,
+                     "-c:v", "libx264", "-preset", "veryfast", "-profile:v", "high", "-pix_fmt", "yuv420p",
+                     "-b:v", "3000k", "-maxrate", "3000k", "-bufsize", "6000k",
+                     "-g", "60", "-keyint_min", "60", "-sc_threshold", "0",
+                     "-c:a", "aac", "-b:a", "128k", "-ar", "44100", "-ac", "2",
+                     "-f", "flv", f"rtmp://a.rtmp.youtube.com/live2/{KEY}"]
+              p = subprocess.Popen(cmd, stderr=subprocess.PIPE, text=True, bufsize=1, errors="replace")
+              start, last = None, None
+              try:
+                  for line in p.stderr:
+                      m = re.search(r"frame:\s*\d+\s+pts:\s*-?\d+\s+pts_time:\s*(-?[\d.]+)", line)
+                      if m:
+                          if start is not None:
+                              txt = caption_at(start + float(m.group(1)))
+                              if txt != last:
+                                  put(txt)
+                                  last = txt
+                          continue
+                      if start is None:
+                          m = re.search(r"Duration:.*?start:\s*([\d.]+)", line)
+                          if m:
+                              start = float(m.group(1))
+                      if re.search(r"\[(warning|error|fatal)\]", line):
+                          print(line, end="", flush=True)
+              finally:
+                  stop.set()
+                  p.terminate()
+
+
+          if __name__ == "__main__":
+              main()
+          PY
+
+      - name: Stream
+        shell: bash
+        run: |
+          LIMIT=20400   # 340 min
+          while (( SECONDS < LIMIT )); do
+            timeout --signal=INT $(( LIMIT - SECONDS )) python3 stream.py || true
+            sleep 5
+          done
+
+          # hand off to the next run (skipped if we died early, to avoid a restart loop)
+          if (( SECONDS > 600 )); then
+            gh workflow run "${{ github.workflow }}" --ref "${{ github.ref_name }}"
+          fi
