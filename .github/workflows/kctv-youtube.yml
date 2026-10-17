@@ -1,0 +1,121 @@
+name: KCTV → YouTube
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 */6 * * *"   # fallback if the self-restart chain ever breaks
+
+concurrency:
+  group: kctv-youtube
+  cancel-in-progress: false
+
+permissions:
+  actions: write   # lets the job dispatch its own successor
+  contents: read
+
+jobs:
+  stream:
+    runs-on: ubuntu-latest
+    timeout-minutes: 358
+    env:
+      VIDEO_URL: https://live.koryocdn.org/kctv/video.m3u8
+      SUBS_URL: https://live.koryocdn.org/kctv/subs/en.m3u8
+      SUB_DELAY: "0"   # seconds; raise/lower to sync captions with video
+      YT_KEY: ${{ secrets.YOUTUBE_SUBTITLES_KCTV }}
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - name: Install ffmpeg
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg fonts-dejavu-core
+
+      - name: Write subtitle poller
+        run: |
+          cat > subs.py <<'PY'
+          import os, re, time, urllib.parse, urllib.request
+
+          SUBS = os.environ["SUBS_URL"]
+          DELAY = float(os.environ.get("SUB_DELAY", "0"))
+          OUT, TMP = "/tmp/sub.txt", "/tmp/sub.txt.tmp"
+          UA = {"User-Agent": "Mozilla/5.0"}
+
+          def get(u):
+              r = urllib.request.Request(u, headers=UA)
+              return urllib.request.urlopen(r, timeout=10).read().decode("utf-8", "replace")
+
+          def ts(s):
+              p = [float(x) for x in s.strip().replace(",", ".").split(":")]
+              while len(p) < 3:
+                  p.insert(0, 0.0)
+              return p[0] * 3600 + p[1] * 60 + p[2]
+
+          def parse(vtt):
+              cues = []
+              for block in re.split(r"\n\s*\n", vtt.replace("\r", "")):
+                  lines = [l for l in block.split("\n") if l.strip()]
+                  for i, l in enumerate(lines):
+                      if "-->" in l:
+                          a, b = l.split("-->")
+                          text = re.sub(r"<[^>]+>", "", "\n".join(lines[i + 1:])).strip()
+                          if text:
+                              cues.append((ts(a), ts(b.split()[0]), text))
+                          break
+              return cues
+
+          def write(text):
+              with open(TMP, "w", encoding="utf-8") as f:
+                  f.write(text)
+              os.replace(TMP, OUT)
+
+          write(" ")
+          seen, queue, first = set(), [], True
+          while True:
+              try:
+                  pl = get(SUBS)
+                  segs = [urllib.parse.urljoin(SUBS, l.strip())
+                          for l in pl.splitlines() if l.strip() and not l.startswith("#")]
+                  if first:
+                      seen.update(segs[:-1])
+                      first = False
+                  for s in segs:
+                      if s in seen:
+                          continue
+                      seen.add(s)
+                      cues = parse(get(s))
+                      if cues:
+                          base, now = min(c[0] for c in cues), time.time()
+                          for a, b, t in cues:
+                              show = now + DELAY + (a - base)
+                              queue.append((show, show + max(b - a, 1.5), t))
+              except Exception as e:
+                  print("subs:", e, flush=True)
+              for _ in range(10):
+                  now = time.time()
+                  queue[:] = [q for q in queue if q[1] > now]
+                  write("\n".join(q[2] for q in queue if q[0] <= now < q[1]) or " ")
+                  time.sleep(0.2)
+          PY
+
+      - name: Stream
+        shell: bash
+        run: |
+          python3 subs.py &
+          trap 'kill $(jobs -p) 2>/dev/null || true' EXIT
+
+          LIMIT=20400   # 340 min
+          while (( SECONDS < LIMIT )); do
+            timeout --signal=INT $(( LIMIT - SECONDS )) ffmpeg -hide_banner -loglevel warning \
+              -rw_timeout 15000000 -i "$VIDEO_URL" \
+              -vf "scale=-2:720,fps=30,drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf:textfile=/tmp/sub.txt:reload=1:expansion=none:fontcolor=white:fontsize=34:box=1:boxcolor=black@0.6:boxborderw=10:line_spacing=6:x=(w-text_w)/2:y=h-text_h-50" \
+              -c:v libx264 -preset veryfast -profile:v high -pix_fmt yuv420p \
+              -b:v 3000k -maxrate 3000k -bufsize 6000k -g 60 -keyint_min 60 -sc_threshold 0 \
+              -c:a aac -b:a 128k -ar 44100 -ac 2 \
+              -f flv "rtmp://a.rtmp.youtube.com/live2/$YT_KEY" || true
+            sleep 5
+          done
+
+          # hand off to the next run (skipped if we died early, to avoid a restart loop)
+          if (( SECONDS > 600 )); then
+            gh workflow run "${{ github.workflow }}" --ref "${{ github.ref_name }}"
+          fi
